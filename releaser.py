@@ -3,7 +3,7 @@ import pathlib
 import subprocess
 
 
-def main(project_folder: pathlib.PurePath, release_folder: pathlib.PurePath):
+def main(project_folder: pathlib.Path, release_folder: pathlib.Path):
     print(
         f"Releasing project in {project_folder.absolute()} into {release_folder.absolute()}"
     )
@@ -11,6 +11,6 @@ def main(project_folder: pathlib.PurePath, release_folder: pathlib.PurePath):
 
 if __name__ == "__main__":
     main(
-        project_folder=pathlib.PurePath(sys.argv[1]),
-        release_folder=pathlib.PurePath(sys.argv[2]),
+        project_folder=pathlib.Path(sys.argv[1]),
+        release_folder=pathlib.Path(sys.argv[2]),
     )
