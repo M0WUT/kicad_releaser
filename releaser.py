@@ -1,11 +1,49 @@
 import sys
 import pathlib
 import subprocess
+import typing
+
+
+def discover_kicad_projects(project_folder: pathlib.Path) -> str:
+    kicad_projects = [x for x in project_folder.iterdir() if x.suffix == ".kicad_pro"]
+    assert len(kicad_projects) == 1
+    project_name = kicad_projects[0].stem
+    print(f"Kicad project found: {project_name}")
+    return project_name
+
+
+def generate_schematic_pdf(
+    schematic: pathlib.Path, output_file: typing.Optional[pathlib.Path] = None
+):
+    commands = [
+        "kicad-cli",
+        "sch",
+        "export",
+        "pdf",
+        schematic.absolute(),
+    ]
+
+    if output_file:
+        commands += [
+            "-o",
+            output_file.absolute(),
+        ]
+
+    result = subprocess.run(
+        commands,
+        capture_output=True,
+    )
+    result.check_returncode()
 
 
 def main(project_folder: pathlib.Path, release_folder: pathlib.Path):
     print(
         f"Releasing project in {project_folder.absolute()} into {release_folder.absolute()}"
+    )
+
+    project_name = discover_kicad_projects(project_folder)
+    generate_schematic_pdf(
+        project_folder / f"{project_name}.kicad_sch", release_folder / "schematic.pdf"
     )
 
 
