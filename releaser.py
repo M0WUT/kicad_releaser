@@ -36,6 +36,22 @@ def generate_schematic_pdf(
     result.check_returncode()
 
 
+def generate_webpage(release_folder: pathlib.Path):
+    (release_folder / "web").mkdir(exist_ok=True)
+    commands = [
+        "python",
+        "-m",
+        "kikit.ui",
+        "present",
+    ]
+
+    result = subprocess.run(
+        commands,
+        capture_output=True,
+    )
+    result.check_returncode()
+
+
 def main(project_folder: pathlib.Path, release_folder: pathlib.Path):
     print(
         f"Releasing project in {project_folder.absolute()} into {release_folder.absolute()}"
@@ -45,6 +61,7 @@ def main(project_folder: pathlib.Path, release_folder: pathlib.Path):
     generate_schematic_pdf(
         project_folder / f"{project_name}.kicad_sch", release_folder / "schematic.pdf"
     )
+    generate_webpage()
 
 
 if __name__ == "__main__":
