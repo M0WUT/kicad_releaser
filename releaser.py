@@ -3,10 +3,12 @@ import pathlib
 import subprocess
 
 
-def main(x):  # project_folder: str, release_folder: str):
-    # print(f"Releasing project in {project_folder} into {release_folder}")
-    print(x)
+def main(project_folder: pathlib.PurePath, release_folder: pathlib.PurePath):
+    print(f"Releasing project in {project_folder} into {release_folder}")
 
 
 if __name__ == "__main__":
-    main(sys.argv)
+    main(
+        project_folder=pathlib.PurePath(sys.argv[1]),
+        release_folder=pathlib.PurePath(sys.argv[2]),
+    )
