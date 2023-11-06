@@ -4,7 +4,9 @@ import subprocess
 
 
 def main(project_folder: pathlib.PurePath, release_folder: pathlib.PurePath):
-    print(f"Releasing project in {project_folder} into {release_folder}")
+    print(
+        f"Releasing project in {project_folder.absolute()} into {release_folder.absolute()}"
+    )
 
 
 if __name__ == "__main__":
