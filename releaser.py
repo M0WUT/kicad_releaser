@@ -51,7 +51,7 @@ def generate_webpage(
         "-b",
         "bob name",
         "it's alive",
-        pcb_path,
+        pcb_path.absolute(),
         "--template",
         "template",
         (release_folder / "web").absolute(),
