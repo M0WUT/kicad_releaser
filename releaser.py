@@ -54,7 +54,7 @@ def generate_webpage(
         pcb_path,
         "--template",
         "template",
-        release_folder / "web",
+        release_folder / "web".absolute(),
     ]
 
     result = subprocess.run(
