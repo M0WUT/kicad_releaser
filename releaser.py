@@ -36,18 +36,30 @@ def generate_schematic_pdf(
     result.check_returncode()
 
 
-def generate_webpage(release_folder: pathlib.Path):
+def generate_webpage(
+    project_name: str, pcb_path: pathlib.Path, release_folder: pathlib.Path
+):
     (release_folder / "web").mkdir(exist_ok=True)
     commands = [
-        "python",
-        "-m",
-        "kikit.ui",
+        "kikit",
         "present",
+        "boardpage",
+        "-d",
+        "README.md",
+        "--name",
+        f"{project_name}",
+        "-b",
+        "bob name",
+        "it's alive",
+        pcb_path,
+        "--template",
+        "template",
+        release_folder / "web",
     ]
 
     result = subprocess.run(
         commands,
-        capture_output=True,
+        # capture_output=True,
     )
     result.check_returncode()
 
@@ -61,7 +73,11 @@ def main(project_folder: pathlib.Path, release_folder: pathlib.Path):
     generate_schematic_pdf(
         project_folder / f"{project_name}.kicad_sch", release_folder / "schematic.pdf"
     )
-    generate_webpage()
+    generate_webpage(
+        project_name=project_name,
+        pcb_path=project_folder / f"{project_name}.kicad_pcb",
+        release_folder=release_folder,
+    )
 
 
 if __name__ == "__main__":
