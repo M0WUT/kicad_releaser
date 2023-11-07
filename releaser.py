@@ -70,9 +70,9 @@ def main(project_folder: pathlib.Path, release_folder: pathlib.Path):
     )
 
     project_name = discover_kicad_projects(project_folder)
-    generate_schematic_pdf(
-        project_folder / f"{project_name}.kicad_sch", release_folder / "schematic.pdf"
-    )
+    # generate_schematic_pdf(
+    #     project_folder / f"{project_name}.kicad_sch", release_folder / "schematic.pdf"
+    # )
     generate_webpage(
         project_name=project_name,
         pcb_path=project_folder / f"{project_name}.kicad_pcb",
