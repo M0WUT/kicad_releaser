@@ -37,7 +37,7 @@ def generate_schematic_pdf(
 
 
 def generate_webpage(
-    project_name: str, pcb_path: pathlib.Path, release_folder: pathlib.Path
+    project_name: str, project_folder: pathlib.Path, release_folder: pathlib.Path
 ):
     (release_folder / "web").mkdir(exist_ok=True)
     commands = [
@@ -45,13 +45,13 @@ def generate_webpage(
         "present",
         "boardpage",
         "-d",
-        "README.md",
+        (project_folder / "README.md").absolute(),
         "--name",
         f"{project_name}",
         "-b",
         "bob name",
         "it's alive",
-        pcb_path.absolute(),
+        (project_folder / f"{project_name}.kicad_pcb").absolute(),
         "--template",
         "kicad_releaser/template",
         (release_folder / "web").absolute(),
@@ -75,7 +75,7 @@ def main(project_folder: pathlib.Path, release_folder: pathlib.Path):
     # )
     generate_webpage(
         project_name=project_name,
-        pcb_path=project_folder / f"{project_name}.kicad_pcb",
+        project_folder=project_folder,
         release_folder=release_folder,
     )
 
