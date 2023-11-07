@@ -53,7 +53,7 @@ def generate_webpage(
         "it's alive",
         pcb_path.absolute(),
         "--template",
-        "template",
+        "kicad_releaser/template",
         (release_folder / "web").absolute(),
     ]
 
