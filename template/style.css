@@ -28,7 +28,9 @@ small{
     font-size:80%
 }
 img{
-    border-style:none
+    border-style:none;
+    max-height:100%;
+    max-width:100%;
 }
 input{
     font-family:inherit;
