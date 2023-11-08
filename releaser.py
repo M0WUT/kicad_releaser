@@ -39,7 +39,6 @@ def generate_schematic_pdf(
 def generate_webpage(
     project_name: str, project_folder: pathlib.Path, release_folder: pathlib.Path
 ):
-    (release_folder / "web").mkdir(exist_ok=True)
     commands = [
         "kikit",
         "present",
@@ -54,7 +53,7 @@ def generate_webpage(
         (project_folder / f"{project_name}.kicad_pcb").absolute(),
         "--template",
         "kicad_releaser/template",
-        (release_folder / "web").absolute(),
+        release_folder.absolute(),
     ]
 
     result = subprocess.run(
