@@ -37,37 +37,23 @@ def generate_schematic_pdf(
 
 
 def generate_board_images(pcb_file: pathlib.Path, output_folder: pathlib.Path):
-    commands = [
-        f"WUT_LIBRARIES={pathlib.Path('wut-libraries').absolute()}",
-        "pcbdraw",
-        "render",
-        pcb_file.absolute(),
-        "--side",
-        "front" "--transparent",
-        (output_folder / "board_front.png").absolute(),
-    ]
+    for side in ["front", "back"]:
+        commands = [
+            "pcbdraw",
+            "render",
+            pcb_file.absolute(),
+            "--side",
+            f"{side}",
+            "--transparent",
+            (output_folder / f"board_{side}.png").absolute(),
+        ]
 
-    result = subprocess.run(
-        commands,
-        capture_output=True,
-    )
-    result.check_returncode()
-
-    commands = [
-        f"WUT_LIBRARIES={pathlib.Path('wut-libraries').absolute()}",
-        "pcbdraw",
-        "render",
-        pcb_file.absolute(),
-        "--side",
-        "back" "--transparent",
-        (output_folder / "board_back.png").absolute(),
-    ]
-
-    result = subprocess.run(
-        commands,
-        capture_output=True,
-    )
-    result.check_returncode()
+        result = subprocess.run(
+            commands,
+            env={"WUT_LIBRARIES": pathlib.Path("wut-libraries").absolute()},
+            capture_output=True,
+        )
+        result.check_returncode()
 
 
 def generate_webpage(
