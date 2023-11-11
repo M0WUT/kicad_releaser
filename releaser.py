@@ -51,6 +51,8 @@ def generate_board_images(pcb_file: pathlib.Path, output_folder: pathlib.Path):
             (output_folder / f"board_{side}.png").absolute(),
         ]
 
+        print(commands)
+
         system_env = os.environ.copy()
         system_env["WUT_LIBRARIES"] = pathlib.Path("wut-libraries").absolute()
 
