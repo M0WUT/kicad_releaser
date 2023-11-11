@@ -55,7 +55,7 @@ def generate_board_images(pcb_file: pathlib.Path, output_folder: pathlib.Path):
         result = subprocess.run(
             commands,
             env=system_env,
-            capture_output=True,
+            # capture_output=True,
         )
         result.check_returncode()
 
