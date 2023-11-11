@@ -47,7 +47,8 @@ def generate_board_images(pcb_file: pathlib.Path, output_folder: pathlib.Path):
             f"{side}",
             "--transparent",
             "--renderer",
-            "raytrace"(output_folder / f"board_{side}.png").absolute(),
+            "raytrace",
+            (output_folder / f"board_{side}.png").absolute(),
         ]
 
         system_env = os.environ.copy()
