@@ -90,7 +90,7 @@ def generate_webpage(
 
 
 def create_kicad_config():
-    config_path = pathlib.Path("~") / ".config" / "kicad" / "7.0"
+    config_path = pathlib.Path.home() / ".config" / "kicad" / "7.0"
     config_path.mkdir(parents=True, exist_ok=True)
     commands = ["cp", "-r", "kicad_releaser/kicad_settings/*", config_path.absolute()]
 
