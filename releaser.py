@@ -36,6 +36,44 @@ def generate_schematic_pdf(
     result.check_returncode()
 
 
+def generate_board_images(
+    pcb_file: pathlib.Path, output_folder: pathlib.path
+):
+    commands = [
+        f"WUT_LIBRARIES={pathlib.Path("wut-libraries").absolute()}",
+        "pcbdraw",
+        "render",
+        pcb_file.absolute(),
+        "--side",
+        "front"
+        "--transparent",
+        (output_folder / "board_front.png").absolute()
+    ]
+
+    result = subprocess.run(
+        commands,
+        capture_output=True,
+    )
+    result.check_returncode()
+
+    commands = [
+        f"WUT_LIBRARIES={pathlib.Path("wut-libraries").absolute()}",
+        "pcbdraw",
+        "render",
+        pcb_file.absolute(),
+        "--side",
+        "back"
+        "--transparent",
+        (output_folder / "board_back.png").absolute()
+    ]
+
+    result = subprocess.run(
+        commands,
+        capture_output=True,
+    )
+    result.check_returncode()
+
+
 def generate_webpage(
     project_name: str, project_folder: pathlib.Path, release_folder: pathlib.Path
 ):
@@ -72,6 +110,10 @@ def main(project_folder: pathlib.Path, release_folder: pathlib.Path):
     # generate_schematic_pdf(
     #     project_folder / f"{project_name}.kicad_sch", release_folder / "schematic.pdf"
     # )
+    generate_board_images(
+        (project_folder) / f"{project_name}.kicad_pcb",
+        release_folder
+    )
     generate_webpage(
         project_name=project_name,
         project_folder=project_folder,
