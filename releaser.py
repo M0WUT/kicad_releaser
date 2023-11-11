@@ -86,15 +86,11 @@ def generate_webpage(
     )
     result.check_returncode()
 
+
 def create_kicad_config():
     config_path = pathlib.Path(".config") / "kicad" / "7.0"
     config_path.mkdir(parents=True, exist_ok=True)
-    commands = [
-        "cp",
-        "-r",
-        "kicad_releaser/kicad_settings"   
-        config_path.absolute() 
-    ]
+    commands = ["cp", "-r", "kicad_releaser/kicad_settings", config_path.absolute()]
 
     result = subprocess.run(
         commands,
