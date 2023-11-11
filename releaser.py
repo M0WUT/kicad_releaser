@@ -90,7 +90,7 @@ def generate_webpage(
 def create_kicad_config():
     config_path = pathlib.Path(".config") / "kicad" / "7.0"
     config_path.mkdir(parents=True, exist_ok=True)
-    commands = ["cp", "-r", "kicad_releaser/kicad_settings", config_path.absolute()]
+    commands = ["cp", "-r", "kicad_releaser/kicad_settings/*", config_path.absolute()]
 
     result = subprocess.run(
         commands,
@@ -103,7 +103,7 @@ def main(project_folder: pathlib.Path, release_folder: pathlib.Path):
     print(
         f"Releasing project in {project_folder.absolute()} into {release_folder.absolute()}"
     )
-    # create_kicad_config()
+    create_kicad_config()
     project_name = discover_kicad_projects(project_folder)
     # generate_schematic_pdf(
     #     project_folder / f"{project_name}.kicad_sch", release_folder / "schematic.pdf"
