@@ -36,7 +36,7 @@ def generate_schematic_pdf(
     result.check_returncode()
 
 
-def generate_board_images(pcb_file: pathlib.Path, output_folder: pathlib.path):
+def generate_board_images(pcb_file: pathlib.Path, output_folder: pathlib.Path):
     commands = [
         f"WUT_LIBRARIES={pathlib.Path('wut-libraries').absolute()}",
         "pcbdraw",
