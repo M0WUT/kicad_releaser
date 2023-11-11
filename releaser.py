@@ -2,6 +2,7 @@ import sys
 import pathlib
 import subprocess
 import typing
+import os
 
 
 def discover_kicad_projects(project_folder: pathlib.Path) -> str:
@@ -48,9 +49,12 @@ def generate_board_images(pcb_file: pathlib.Path, output_folder: pathlib.Path):
             (output_folder / f"board_{side}.png").absolute(),
         ]
 
+        system_env = os.environ.copy()
+        system_env["WUT_LIBRARIES"] = pathlib.Path("wut-libraries").absolute()
+
         result = subprocess.run(
             commands,
-            env={"WUT_LIBRARIES": pathlib.Path("wut-libraries").absolute()},
+            env=system_env,
             capture_output=True,
         )
         result.check_returncode()
