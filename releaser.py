@@ -57,7 +57,7 @@ def generate_board_images(
     result.check_returncode()
 
     commands = [
-        f"WUT_LIBRARIES={pathlib.Path("wut-libraries").absolute()}",
+        f"WUT_LIBRARIES={pathlib.Path('wut-libraries').absolute()}",
         "pcbdraw",
         "render",
         pcb_file.absolute(),
