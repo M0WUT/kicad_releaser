@@ -110,9 +110,9 @@ def main(project_folder: pathlib.Path, release_folder: pathlib.Path):
     # generate_schematic_pdf(
     #     project_folder / f"{project_name}.kicad_sch", release_folder / "schematic.pdf"
     # )
-    generate_board_images(
-        (project_folder) / f"{project_name}.kicad_pcb", release_folder
-    )
+    # generate_board_images(
+    #     (project_folder) / f"{project_name}.kicad_pcb", release_folder
+    # )
     generate_webpage(
         project_name=project_name,
         project_folder=project_folder,
