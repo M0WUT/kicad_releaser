@@ -4,6 +4,7 @@ import subprocess
 import typing
 import os
 import pypdf
+import git
 
 
 def discover_kicad_projects(project_folder: pathlib.Path) -> str:
@@ -33,26 +34,32 @@ def generate_schematic_pdf(schematic: pathlib.Path, output_file: pathlib.Path):
     )
     result.check_returncode()
 
-    # Load watermark pdf
-    watermark_a3 = pypdf.PdfReader(
-        (pathlib.Path(__file__).parent / "draft_watermark_a3.pdf").absolute()
-    ).pages[0]
-
-    watermark_a4 = pypdf.PdfReader(
-        (pathlib.Path(__file__).parent / "draft_watermark_a4.pdf").absolute()
-    ).pages[0]
+    # Check if draft release and add watermarks if so
+    repo = git.Repo(pathlib.Path(schematic.parent))
+    last_commit = repo.head.commit
 
     writer = pypdf.PdfWriter(clone_from=temp_schematic_path.absolute())
-    for page in writer.pages:
-        width = page.mediabox.width
-        # I have no idea where these numbers come from - found by printing values
-        # from pages of known sizes
-        if width == 1190.52:
-            page.merge_page(watermark_a3, over=False)
-        elif width == 841.896:
-            page.merge_page(watermark_a4, over=False)
-        else:
-            raise NotImplementedError(width)
+
+    if "RELEASE:" not in last_commit.message:
+        # Load watermark pdfs
+        watermark_a3 = pypdf.PdfReader(
+            (pathlib.Path(__file__).parent / "draft_watermark_a3.pdf").absolute()
+        ).pages[0]
+
+        watermark_a4 = pypdf.PdfReader(
+            (pathlib.Path(__file__).parent / "draft_watermark_a4.pdf").absolute()
+        ).pages[0]
+
+        for page in writer.pages:
+            width = page.mediabox.width
+            # I have no idea where these numbers come from - found by printing values
+            # from pages of known sizes
+            if width == 1190.52:
+                page.merge_page(watermark_a3, over=False)
+            elif width == 841.896:
+                page.merge_page(watermark_a4, over=False)
+            else:
+                raise NotImplementedError(width)
 
     writer.write(output_file.absolute())
 
@@ -85,6 +92,9 @@ def generate_board_images(pcb_file: pathlib.Path, output_folder: pathlib.Path):
 def generate_webpage(
     project_name: str, project_folder: pathlib.Path, release_folder: pathlib.Path
 ):
+    repo = git.Repo(project_folder)
+    url = repo.remotes.origin.url[:-4]  # Remove .git
+    print(url)
     commands = [
         "kikit",
         "present",
@@ -94,11 +104,13 @@ def generate_webpage(
         "--name",
         f"{project_name}",
         "-b",
-        "bob name",
+        f"{project_name}",
         "it's alive",
         (project_folder / f"{project_name}.kicad_pcb").absolute(),
         "--template",
         (pathlib.Path(__file__).parent / "template").absolute(),
+        "--repository",
+        url,
         release_folder.absolute(),
     ]
 
@@ -121,6 +133,26 @@ def create_kicad_config():
     result.check_returncode()
 
 
+def create_kicad_source(
+    project_folder: pathlib.Path,
+    project_name: pathlib.Path,
+    release_folder: pathlib.Path,
+):
+    repo = git.Repo(project_folder)
+    commands = [
+        "zip",
+        (release_folder / f"{project_name}_{repo.head.commit.hexsha}.zip").absolute(),
+    ]
+
+    commands += [x for x in (project_folder).glob("*") if not ".git" in str(x)]
+
+    result = subprocess.run(
+        commands,
+        # capture_output=True,
+    )
+    result.check_returncode()
+
+
 def main(project_folder: pathlib.Path, release_folder: pathlib.Path):
     print(
         f"Releasing project in {project_folder.absolute()} into {release_folder.absolute()}"
@@ -130,6 +162,7 @@ def main(project_folder: pathlib.Path, release_folder: pathlib.Path):
     generate_schematic_pdf(
         project_folder / f"{project_name}.kicad_sch", release_folder / "schematic.pdf"
     )
+    create_kicad_source(project_folder, project_name, release_folder)
     # generate_board_images(
     #     (project_folder) / f"{project_name}.kicad_pcb", release_folder
     # )
