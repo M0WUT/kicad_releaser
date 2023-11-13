@@ -3,6 +3,7 @@ import pathlib
 import subprocess
 import typing
 import os
+import pypdf
 
 
 def discover_kicad_projects(project_folder: pathlib.Path) -> str:
@@ -13,28 +14,34 @@ def discover_kicad_projects(project_folder: pathlib.Path) -> str:
     return project_name
 
 
-def generate_schematic_pdf(
-    schematic: pathlib.Path, output_file: typing.Optional[pathlib.Path] = None
-):
+def generate_schematic_pdf(schematic: pathlib.Path, output_file: pathlib.Path):
+    temp_schematic_path = pathlib.Path(__file__).parent / "temp_schematic.pdf"
     commands = [
         "kicad-cli",
         "sch",
         "export",
         "pdf",
         schematic.absolute(),
+        "-o",
+        temp_schematic_path.absolute(),
+        "--no-background-color",
     ]
-
-    if output_file:
-        commands += [
-            "-o",
-            output_file.absolute(),
-        ]
 
     result = subprocess.run(
         commands,
         capture_output=True,
     )
     result.check_returncode()
+
+    # Load watermark pdf
+    watermark = pypdf.PdfReader(
+        (pathlib.Path(__file__).parent / "draft_watermark.pdf").absolute()
+    ).pages[0]
+    writer = pypdf.PdfWriter(clone_from=temp_schematic_path.absolute())
+    for page in writer.pages:
+        print(f"Width: {page.mediabox.width}, Height: {page.mediabox.height}")
+        page.merge_page(watermark, over=False)
+    writer.write(output_file.absolute())
 
 
 def generate_board_images(pcb_file: pathlib.Path, output_folder: pathlib.Path):
@@ -78,7 +85,7 @@ def generate_webpage(
         "it's alive",
         (project_folder / f"{project_name}.kicad_pcb").absolute(),
         "--template",
-        "kicad_releaser/template",
+        (pathlib.Path(__file__).parent / "template").absolute(),
         release_folder.absolute(),
     ]
 
