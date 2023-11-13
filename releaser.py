@@ -93,7 +93,7 @@ def generate_webpage(
     project_name: str, project_folder: pathlib.Path, release_folder: pathlib.Path
 ):
     repo = git.Repo(project_folder)
-    url = repo.remotes.origin.url[:-4]  # Remove .git
+    url = repo.remotes.origin.url  # Remove .git
     print(url)
     commands = [
         "kikit",
