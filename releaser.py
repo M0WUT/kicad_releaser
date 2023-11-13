@@ -107,9 +107,9 @@ def main(project_folder: pathlib.Path, release_folder: pathlib.Path):
     )
     # create_kicad_config()
     project_name = discover_kicad_projects(project_folder)
-    # generate_schematic_pdf(
-    #     project_folder / f"{project_name}.kicad_sch", release_folder / "schematic.pdf"
-    # )
+    generate_schematic_pdf(
+        project_folder / f"{project_name}.kicad_sch", release_folder / "schematic.pdf"
+    )
     # generate_board_images(
     #     (project_folder) / f"{project_name}.kicad_pcb", release_folder
     # )

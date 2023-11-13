@@ -28,7 +28,9 @@ small{
     font-size:80%
 }
 img{
-    border-style:none
+    border-style:none;
+    width: 100%;
+    height: auto
 }
 input{
     font-family:inherit;
@@ -142,7 +144,7 @@ code,pre{
     }
 }
 .bg-gray-200{
-    background-color:#edf2f7
+    background-color:#edf7ef
 }
 .rounded{
     border-radius:.25rem

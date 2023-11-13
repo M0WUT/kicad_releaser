@@ -1,4 +1,4 @@
 {
     "type": "HtmlTemplate",
-    "resources": ["*.css"]
+    "resources": ["style.css"]
 }
