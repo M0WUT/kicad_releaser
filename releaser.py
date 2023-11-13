@@ -117,7 +117,7 @@ def generate_webpage(
     print(commands)
     result = subprocess.run(
         commands,
-        # capture_output=True,
+        capture_output=True,
     )
     result.check_returncode()
 
@@ -136,7 +136,7 @@ def create_kicad_config():
 
 def create_kicad_source(
     project_folder: pathlib.Path,
-    project_name: pathlib.Path,
+    project_name: str,
     release_folder: pathlib.Path,
 ):
     repo = git.Repo(project_folder)
@@ -148,6 +148,25 @@ def create_kicad_source(
     ]
 
     commands += [x for x in (project_folder).glob("*") if not ".git" in str(x)]
+
+    result = subprocess.run(
+        commands,
+        capture_output=True,
+    )
+    result.check_returncode()
+
+
+def create_step_file(pcb_file: pathlib.Path, project_name: str, output_folder: pathlib.Path):
+    commands = [
+        "kicad-cli",
+        "pcb",
+        "export",
+        "step",
+        "--subst-models",
+        pcb_file.absolute(),
+        "-o",
+        (output_folder / f"{project_name}.step")absolute(),
+    ]
 
     result = subprocess.run(
         commands,
@@ -169,6 +188,7 @@ def main(project_folder: pathlib.Path, release_folder: pathlib.Path):
     # generate_board_images(
     #     (project_folder) / f"{project_name}.kicad_pcb", release_folder
     # )
+    create_step_file((project_folder) / f"{project_name}.kicad_pcb", project_name, release_folder)
     generate_webpage(
         project_name=project_name,
         project_folder=project_folder,
