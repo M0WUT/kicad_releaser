@@ -170,9 +170,13 @@ def create_step_file(
         (output_folder / f"{project_name}.step").absolute(),
     ]
 
+    system_env = os.environ.copy()
+    system_env["WUT_LIBRARIES"] = pathlib.Path("../wut-libraries").absolute()
+
     result = subprocess.run(
         commands,
-        capture_output=True,
+        env=system_env,
+        # capture_output=True,
     )
     result.check_returncode()
 
