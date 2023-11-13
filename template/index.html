@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
-    <title>{{name}}</title>
+    <title>{{name}}_{{repo}}</title>
 </head>
 
 <body>
@@ -13,7 +13,7 @@
         <div class="w-full my-3 text-sm text-right bg-gray-200 px-3 py-1">
             Last update: {{datetime}}
                 {{#if gitRev}}(git revision
-                    {{#if repo}}<a href="{{repo}}/tree/{{gitRev}}">{{/if}}
+                    {{#if repo}}<a href="{{repo}}/tree/{{gitRevShort}}">{{/if}}
                     {{gitRevShort}}
                     {{#if repo}}</a>{{/if}})
                 {{/if}}
@@ -21,7 +21,7 @@
 
         {{{description}}}
 
-        <h1>Available files</h1>
+        <h1>Available files {{repo}} {{gitRev}}</h1>
 
         {{#each boards}}
             <div class="w-full wrap bg-gray-200 py-3 px-3 my-2 rounded">

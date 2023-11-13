@@ -114,6 +114,7 @@ def generate_webpage(
         release_folder.absolute(),
     ]
 
+    print(commands)
     result = subprocess.run(
         commands,
         # capture_output=True,
@@ -128,7 +129,7 @@ def create_kicad_config():
 
     result = subprocess.run(
         commands,
-        # capture_output=True,
+        capture_output=True,
     )
     result.check_returncode()
 
@@ -141,14 +142,16 @@ def create_kicad_source(
     repo = git.Repo(project_folder)
     commands = [
         "zip",
-        (release_folder / f"{project_name}_{repo.head.commit.hexsha}.zip").absolute(),
+        (
+            release_folder / f"{project_name}_{repo.head.commit.hexsha[:7]}.zip"
+        ).absolute(),
     ]
 
     commands += [x for x in (project_folder).glob("*") if not ".git" in str(x)]
 
     result = subprocess.run(
         commands,
-        # capture_output=True,
+        capture_output=True,
     )
     result.check_returncode()
 
