@@ -34,13 +34,26 @@ def generate_schematic_pdf(schematic: pathlib.Path, output_file: pathlib.Path):
     result.check_returncode()
 
     # Load watermark pdf
-    watermark = pypdf.PdfReader(
-        (pathlib.Path(__file__).parent / "draft_watermark.pdf").absolute()
+    watermark_a3 = pypdf.PdfReader(
+        (pathlib.Path(__file__).parent / "draft_watermark_a3.pdf").absolute()
     ).pages[0]
+
+    watermark_a4 = pypdf.PdfReader(
+        (pathlib.Path(__file__).parent / "draft_watermark_a4.pdf").absolute()
+    ).pages[0]
+
     writer = pypdf.PdfWriter(clone_from=temp_schematic_path.absolute())
     for page in writer.pages:
-        print(f"Width: {page.mediabox.width}, Height: {page.mediabox.height}")
-        page.merge_page(watermark, over=False)
+        width = page.mediabox.width
+        # I have no idea where these numbers come from - found by printing values
+        # from pages of known sizes
+        if width == 1190.52:
+            page.merge_page(watermark_a3, over=False)
+        elif width == 841.896:
+            page.merge_page(watermark_a4, over=False)
+        else:
+            raise NotImplementedError(width)
+
     writer.write(output_file.absolute())
 
 
