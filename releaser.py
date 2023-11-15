@@ -20,7 +20,7 @@ def run_command(commands: list[str], use_wut_libraries: bool = False):
     else:
         result = subprocess.run(
             commands,
-            capture_output=True,
+            # capture_output=True,
         )
     result.check_returncode()
 
@@ -97,7 +97,7 @@ def generate_webpage(
     project_name: str, project_folder: pathlib.Path, release_folder: pathlib.Path
 ):
     repo = git.Repo(project_folder)
-    url = repo.remotes.origin.url  # Remove .git
+    url = repo.remotes.origin.url[:-4]  # Remove .git
 
     run_command(
         [
@@ -183,11 +183,12 @@ def create_ibom(
     create_netlist(project_folder, project_name)
     run_command(
         [
-            "python",
+            "python3",
             "ibom/InteractiveHtmlBom/generate_interactive_bom.py",
             "--dark-mode",
             "--highlight-pin1",
             "all",
+            "--no-browser",
             "--blacklist",
             '"JP*,LAYOUT*',
             "--extra-fields",
