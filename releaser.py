@@ -97,7 +97,7 @@ def generate_webpage(
     project_name: str, project_folder: pathlib.Path, release_folder: pathlib.Path
 ):
     repo = git.Repo(project_folder)
-    url = repo.remotes.origin.url[:-4]  # Remove .git
+    url = repo.remotes.origin.url
 
     run_command(
         [
@@ -190,9 +190,9 @@ def create_ibom(
             "all",
             "--no-browser",
             "--blacklist",
-            '"JP*,LAYOUT*',
+            "JP*,LAYOUT*",
             "--extra-fields",
-            '"Manufacturer,MPN"',
+            "Manufacturer,MPN",
             "--dest-dir",
             output_folder.absolute(),
             "--name-format",
