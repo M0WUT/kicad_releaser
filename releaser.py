@@ -176,7 +176,53 @@ def create_step_file(
     result = subprocess.run(
         commands,
         env=system_env,
-        # capture_output=True,
+        capture_output=True,
+    )
+    result.check_returncode()
+
+
+def create_netlist(project_folder: pathlib.Path, project_name: str):
+    commands = [
+        "kicad-cli",
+        "sch",
+        "export",
+        "netlist",
+        (project_folder / f"{project_name}.kicad_sch").absolute(),
+    ]
+
+    result = subprocess.run(
+        commands,
+        capture_output=True,
+    )
+    result.check_returncode()
+
+
+def create_ibom(
+    project_folder: pathlib.Path, project_name: str, output_folder: pathlib.Path
+):
+    create_netlist(project_folder, project_name)
+    commands = [
+        "python",
+        "ibom/InteractiveHtmlBom/generate_interactive_bom.py",
+        "--dark-mode",
+        "--highlight-pin1",
+        "all",
+        "--blacklist",
+        '"JP*,LAYOUT*',
+        "--extra-fields",
+        '"Manufacturer,MPN"',
+        "--dest-dir",
+        output_folder.absolute(),
+        "--name-format",
+        f"{project_name}.html",
+        "--netlist-file",
+        (project_folder / f"{project_name}.net").absolute(),
+        (project_folder / f"{project_name}.kicad_pcb").absolute(),
+    ]
+
+    result = subprocess.run(
+        commands,
+        capture_output=True,
     )
     result.check_returncode()
 
@@ -197,6 +243,7 @@ def main(project_folder: pathlib.Path, release_folder: pathlib.Path):
     create_step_file(
         (project_folder) / f"{project_name}.kicad_pcb", project_name, release_folder
     )
+    create_ibom(project_folder, project_name, release_folder)
     generate_webpage(
         project_name=project_name,
         project_folder=project_folder,
