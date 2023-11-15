@@ -7,6 +7,24 @@ import pypdf
 import git
 
 
+def run_command(commands: list[str], use_wut_libraries: bool = False):
+    if use_wut_libraries:
+        system_env = os.environ.copy()
+        system_env["WUT_LIBRARIES"] = pathlib.Path("wut-libraries").absolute()
+
+        result = subprocess.run(
+            commands,
+            env=system_env,
+            capture_output=True,
+        )
+    else:
+        result = subprocess.run(
+            commands,
+            capture_output=True,
+        )
+    result.check_returncode()
+
+
 def discover_kicad_projects(project_folder: pathlib.Path) -> str:
     kicad_projects = [x for x in project_folder.iterdir() if x.suffix == ".kicad_pro"]
     assert len(kicad_projects) == 1
@@ -17,22 +35,18 @@ def discover_kicad_projects(project_folder: pathlib.Path) -> str:
 
 def generate_schematic_pdf(schematic: pathlib.Path, output_file: pathlib.Path):
     temp_schematic_path = pathlib.Path(__file__).parent / "temp_schematic.pdf"
-    commands = [
-        "kicad-cli",
-        "sch",
-        "export",
-        "pdf",
-        schematic.absolute(),
-        "-o",
-        temp_schematic_path.absolute(),
-        "--no-background-color",
-    ]
-
-    result = subprocess.run(
-        commands,
-        capture_output=True,
+    run_command(
+        [
+            "kicad-cli",
+            "sch",
+            "export",
+            "pdf",
+            schematic.absolute(),
+            "-o",
+            temp_schematic_path.absolute(),
+            "--no-background-color",
+        ]
     )
-    result.check_returncode()
 
     # Check if draft release and add watermarks if so
     repo = git.Repo(pathlib.Path(schematic.parent))
@@ -66,27 +80,17 @@ def generate_schematic_pdf(schematic: pathlib.Path, output_file: pathlib.Path):
 
 def generate_board_images(pcb_file: pathlib.Path, output_folder: pathlib.Path):
     for side in ["front", "back"]:
-        commands = [
-            "pcbdraw",
-            "render",
-            pcb_file.absolute(),
-            "--side",
-            f"{side}",
-            "--transparent",
-            (output_folder / f"board_{side}.png").absolute(),
-        ]
-
-        print(commands)
-
-        system_env = os.environ.copy()
-        system_env["WUT_LIBRARIES"] = pathlib.Path("wut-libraries").absolute()
-
-        result = subprocess.run(
-            commands,
-            env=system_env,
-            # capture_output=True,
+        run_command(
+            [
+                "pcbdraw",
+                "render",
+                pcb_file.absolute(),
+                "--side",
+                f"{side}",
+                "--transparent",
+                (output_folder / f"board_{side}.png").absolute(),
+            ]
         )
-        result.check_returncode()
 
 
 def generate_webpage(
@@ -94,44 +98,33 @@ def generate_webpage(
 ):
     repo = git.Repo(project_folder)
     url = repo.remotes.origin.url  # Remove .git
-    print(url)
-    commands = [
-        "kikit",
-        "present",
-        "boardpage",
-        "-d",
-        (project_folder / "README.md").absolute(),
-        "--name",
-        f"{project_name}",
-        "-b",
-        f"{project_name}",
-        "it's alive",
-        (project_folder / f"{project_name}.kicad_pcb").absolute(),
-        "--template",
-        (pathlib.Path(__file__).parent / "template").absolute(),
-        "--repository",
-        url,
-        release_folder.absolute(),
-    ]
 
-    print(commands)
-    result = subprocess.run(
-        commands,
-        capture_output=True,
+    run_command(
+        [
+            "kikit",
+            "present",
+            "boardpage",
+            "-d",
+            (project_folder / "README.md").absolute(),
+            "--name",
+            f"{project_name}",
+            "-b",
+            f"{project_name}",
+            "it's alive",
+            (project_folder / f"{project_name}.kicad_pcb").absolute(),
+            "--template",
+            (pathlib.Path(__file__).parent / "template").absolute(),
+            "--repository",
+            url,
+            release_folder.absolute(),
+        ]
     )
-    result.check_returncode()
 
 
 def create_kicad_config():
     config_path = pathlib.Path.home() / ".config" / "kicad" / "7.0"
     config_path.mkdir(parents=True, exist_ok=True)
-    commands = ["cp", "-r", "kicad_releaser/kicad_settings/*", config_path.absolute()]
-
-    result = subprocess.run(
-        commands,
-        capture_output=True,
-    )
-    result.check_returncode()
+    run_command(["cp", "-r", "kicad_releaser/kicad_settings/*", config_path.absolute()])
 
 
 def create_kicad_source(
@@ -140,6 +133,7 @@ def create_kicad_source(
     release_folder: pathlib.Path,
 ):
     repo = git.Repo(project_folder)
+
     commands = [
         "zip",
         (
@@ -149,82 +143,64 @@ def create_kicad_source(
 
     commands += [x for x in (project_folder).glob("*") if not ".git" in str(x)]
 
-    result = subprocess.run(
-        commands,
-        capture_output=True,
-    )
-    result.check_returncode()
+    run_command(commands)
 
 
 def create_step_file(
     pcb_file: pathlib.Path, project_name: str, output_folder: pathlib.Path
 ):
-    commands = [
-        "kicad-cli",
-        "pcb",
-        "export",
-        "step",
-        "--subst-models",
-        pcb_file.absolute(),
-        "-o",
-        (output_folder / f"{project_name}.step").absolute(),
-    ]
-
-    system_env = os.environ.copy()
-    system_env["WUT_LIBRARIES"] = pathlib.Path("../wut-libraries").absolute()
-
-    result = subprocess.run(
-        commands,
-        env=system_env,
-        capture_output=True,
+    run_command(
+        [
+            "kicad-cli",
+            "pcb",
+            "export",
+            "step",
+            "--subst-models",
+            pcb_file.absolute(),
+            "-o",
+            (output_folder / f"{project_name}.step").absolute(),
+        ]
     )
-    result.check_returncode()
 
 
 def create_netlist(project_folder: pathlib.Path, project_name: str):
-    commands = [
-        "kicad-cli",
-        "sch",
-        "export",
-        "netlist",
-        (project_folder / f"{project_name}.kicad_sch").absolute(),
-    ]
-
-    result = subprocess.run(
-        commands,
-        capture_output=True,
+    run_command(
+        [
+            "kicad-cli",
+            "sch",
+            "export",
+            "netlist",
+            "--output",
+            (project_folder / f"{project_name}.net").absolute(),
+            (project_folder / f"{project_name}.kicad_sch").absolute(),
+        ]
     )
-    result.check_returncode()
 
 
 def create_ibom(
     project_folder: pathlib.Path, project_name: str, output_folder: pathlib.Path
 ):
     create_netlist(project_folder, project_name)
-    commands = [
-        "python",
-        "ibom/InteractiveHtmlBom/generate_interactive_bom.py",
-        "--dark-mode",
-        "--highlight-pin1",
-        "all",
-        "--blacklist",
-        '"JP*,LAYOUT*',
-        "--extra-fields",
-        '"Manufacturer,MPN"',
-        "--dest-dir",
-        output_folder.absolute(),
-        "--name-format",
-        f"{project_name}.html",
-        "--netlist-file",
-        (project_folder / f"{project_name}.net").absolute(),
-        (project_folder / f"{project_name}.kicad_pcb").absolute(),
-    ]
-
-    result = subprocess.run(
-        commands,
-        # capture_output=True,
+    run_command(
+        [
+            "python",
+            "ibom/InteractiveHtmlBom/generate_interactive_bom.py",
+            "--dark-mode",
+            "--highlight-pin1",
+            "all",
+            "--blacklist",
+            '"JP*,LAYOUT*',
+            "--extra-fields",
+            '"Manufacturer,MPN"',
+            "--dest-dir",
+            output_folder.absolute(),
+            "--name-format",
+            f"{project_name}",
+            "--netlist-file",
+            (project_folder / f"{project_name}.net").absolute(),
+            (project_folder / f"{project_name}.kicad_pcb").absolute(),
+        ]
     )
-    result.check_returncode()
 
 
 def main(project_folder: pathlib.Path, release_folder: pathlib.Path):
