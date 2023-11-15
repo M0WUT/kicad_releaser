@@ -184,7 +184,7 @@ def create_ibom(
     run_command(
         [
             "python3",
-            "ibom/InteractiveHtmlBom/generate_interactive_bom.py",
+            "../ibom/InteractiveHtmlBom/generate_interactive_bom.py",
             "--dark-mode",
             "--highlight-pin1",
             "all",
