@@ -222,7 +222,7 @@ def create_ibom(
 
     result = subprocess.run(
         commands,
-        capture_output=True,
+        # capture_output=True,
     )
     result.check_returncode()
 
