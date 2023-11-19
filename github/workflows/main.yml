@@ -1,0 +1,86 @@
+name: Kicad deployment
+on:
+  push:
+    branches: [ main ]
+jobs:
+  build-artifacts:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install Kicad
+        run: |
+          sudo add-apt-repository --yes ppa:kicad/kicad-7.0-releases
+          sudo apt update
+          sudo apt install kicad
+      - name: Install 3rd party programs
+        run: sudo apt install make cmark xsltproc librsvg2-bin xdotool
+      - name: Checkout project repo
+        uses: actions/checkout@v4
+        with:
+          path: main
+
+      - name: Checkout M0WUT Libraries
+        uses: actions/checkout@v4
+        with:
+          repository: "M0WUT/kicad_libraries"
+          path: wut-libraries
+
+      - name: Checkout Interactive HTML BoM
+        uses: actions/checkout@v4
+        with:
+          repository: "openscopeproject/InteractiveHtmlBom"
+          path: ibom
+
+      - name: Checkout M0WUT Kicad Releaser
+        uses: actions/checkout@v4
+        with:
+          repository: "M0WUT/kicad_releaser"
+          path: kicad_releaser
+
+      - name: Install Python dependencies
+        run: pip install -r kicad_releaser/requirements.txt
+
+      - run: mkdir -p ~/.config/kicad/7.0
+      - run: cp -r kicad_releaser/kicad_settings/* ~/.config/kicad/7.0
+      - run: mkdir build
+
+      - name: Generate Webpage
+        uses: coactions/setup-xvfb@v1
+        with:
+          run: python ../kicad_releaser/releaser.py . ../build
+          working-directory: main
+          
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v2
+        with:
+          path: build/
+
+  # Deploy job
+  deploy:
+    # Add a dependency to the build job
+    needs: build-artifacts
+
+    # Grant GITHUB_TOKEN the permissions required to make a Pages deployment
+    permissions:
+      pages: write      # to deploy to Pages
+      id-token: write   # to verify the deployment originates from an appropriate source
+
+    # Deploy to the github-pages environment
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    # Specify runner + deployment step
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v2 
+      - name: Webpage URL
+        run: echo ${{ steps.deployment.outputs.page_url }}
+
+    
+      
+      
+
+      
+          
