@@ -10,7 +10,7 @@ import git
 def run_command(commands: list[str], use_wut_libraries: bool = False):
     if use_wut_libraries:
         system_env = os.environ.copy()
-        system_env["WUT_LIBRARIES"] = pathlib.Path("wut-libraries").absolute()
+        system_env["WUT_LIBRARIES"] = pathlib.Path("../wut-libraries").absolute()
 
         result = subprocess.run(
             commands,
