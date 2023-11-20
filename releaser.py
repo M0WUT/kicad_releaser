@@ -212,22 +212,22 @@ def main(project_folder: pathlib.Path, release_folder: pathlib.Path):
     )
     # create_kicad_config()
     project_name = discover_kicad_projects(project_folder)
-    # generate_schematic_pdf(
-    #     project_folder / f"{project_name}.kicad_sch", release_folder / "schematic.pdf"
-    # )
-    # create_kicad_source(project_folder, project_name, release_folder)
+    generate_schematic_pdf(
+        project_folder / f"{project_name}.kicad_sch", release_folder / "schematic.pdf"
+    )
+    create_kicad_source(project_folder, project_name, release_folder)
     generate_board_images(
         (project_folder) / f"{project_name}.kicad_pcb", release_folder
     )
-    # create_step_file(
-    #     (project_folder) / f"{project_name}.kicad_pcb", project_name, release_folder
-    # )
-    # create_ibom(project_folder, project_name, release_folder)
-    # generate_webpage(
-    #     project_name=project_name,
-    #     project_folder=project_folder,
-    #     release_folder=release_folder,
-    # )
+    create_step_file(
+        (project_folder) / f"{project_name}.kicad_pcb", project_name, release_folder
+    )
+    create_ibom(project_folder, project_name, release_folder)
+    generate_webpage(
+        project_name=project_name,
+        project_folder=project_folder,
+        release_folder=release_folder,
+    )
 
 
 if __name__ == "__main__":
