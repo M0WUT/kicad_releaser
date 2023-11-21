@@ -23,7 +23,7 @@
   },
   "environment": {
     "vars": {
-      "WUT_LIBRARIES": "<PATH_TO_WUT_LIBRARIES>"
+      "WUT_LIBRARIES": "PATH_TO_WUT_LIBRARIES"
     }
   },
   "graphics": {
