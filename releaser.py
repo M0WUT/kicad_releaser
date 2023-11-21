@@ -202,7 +202,7 @@ def load_wut_libraries_path():
     with open(CONFIG_SETTINGS_FILE_LOCATION, 'r') as file:
         filedata = file.read()
 
-    filedata.replace("<PATH_TO_WUT_LIBRARIES>", str(LIBRARIES_PATH.absolute()))
+    filedata = filedata.replace("<PATH_TO_WUT_LIBRARIES>", str(LIBRARIES_PATH.absolute()))
 
     with open(CONFIG_SETTINGS_FILE_LOCATION, 'w') as file:
         file.write(filedata)
