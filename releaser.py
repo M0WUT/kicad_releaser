@@ -79,19 +79,21 @@ def generate_schematic_pdf(schematic: pathlib.Path, output_file: pathlib.Path):
 
 
 def generate_board_images(pcb_file: pathlib.Path, output_folder: pathlib.Path):
-    for side in ["front", "back"]:
-        run_command(
-            [
-                "pcbdraw",
-                "render",
-                pcb_file.absolute(),
-                "--side",
-                f"{side}",
-                "--transparent",
-                (output_folder / f"board_{side}.png").absolute(),
-            ],
-            use_wut_libraries=True,
-        )
+    run_command(
+        [
+            "pcbnew_do",
+            "3d_view",
+            "-z",
+            "6",
+            "--ray_tracing",
+            "-o",
+            "board_front.png",
+            pcb_file.absolute(),
+            output_folder.absolute(),
+            "."
+        ],
+        use_wut_libraries=True,
+    )
 
 
 def generate_webpage(
