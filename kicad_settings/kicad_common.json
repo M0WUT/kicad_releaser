@@ -1,7 +1,7 @@
 {
   "appearance": {
-    "hicontrast_dimming_factor": 0.800000011920929,
-    "icon_scale": 0,
+    "hicontrast_dimming_factor": 0.8,
+    "icon_scale": -1,
     "icon_theme": 2,
     "show_scrollbars": false,
     "text_editor_zoom": 0,
@@ -22,7 +22,9 @@
     "zone_fill_warning": false
   },
   "environment": {
-    "vars": null
+    "vars": {
+      "WUT_LIBRARIES": "<PATH_TO_WUT_LIBRARIES>"
+    }
   },
   "graphics": {
     "cairo_antialiasing_mode": 0,
@@ -68,6 +70,6 @@
     "pdf_viewer_name": "",
     "text_editor": "",
     "use_system_pdf_viewer": true,
-    "working_dir": "/home/dan"
+    "working_dir": "/home/dan/test/Master-Timing-Reference"
   }
 }

@@ -243,8 +243,14 @@
     "origin_y": 0.0
   },
   "lib_tree": {
-    "column_widths": null,
-    "columns": []
+    "column_widths": {
+      "Description": 600,
+      "Item": 300
+    },
+    "columns": [
+      "Item",
+      "Description"
+    ]
   },
   "meta": {
     "version": 5
@@ -253,7 +259,7 @@
     "associate_by_ref_sch": false,
     "delete_extra_footprints": false,
     "delete_shorting_tracks": false,
-    "report_filter": -1,
+    "report_filter": 29,
     "update_footprints": true
   },
   "pcb_display": {
@@ -328,8 +334,8 @@
       "/home/dan/test/Master-Timing-Reference/Master Timing Card.kicad_pcb"
     ],
     "first_run_shown": false,
-    "last_footprint3d_dir": "",
-    "last_footprint_lib_dir": "",
+    "last_footprint3d_dir": "/usr/share/kicad/3dmodels/",
+    "last_footprint_lib_dir": "/home/dan/test/kicad_libraries",
     "last_imperial_units": 0,
     "last_metric_units": 1,
     "max_undo_items": 0,

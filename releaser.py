@@ -7,21 +7,12 @@ import pypdf
 import git
 
 
-def run_command(commands: list[str], use_wut_libraries: bool = False):
-    if use_wut_libraries:
-        system_env = os.environ.copy()
-        system_env["WUT_LIBRARIES"] = pathlib.Path("../wut-libraries").absolute()
+def run_command(commands: list[str]):
 
-        result = subprocess.run(
-            commands,
-            env=system_env,
-            capture_output=True,
-        )
-    else:
-        result = subprocess.run(
-            commands,
-            # capture_output=True,
-        )
+    result = subprocess.run(
+        commands,
+        # capture_output=True,
+    )
     result.check_returncode()
 
 
@@ -205,6 +196,17 @@ def create_ibom(
             (project_folder / f"{project_name}.kicad_pcb").absolute(),
         ]
     )
+def load_wut_libraries_path():
+    LIBRARIES_PATH = pathlib.Path("..") / "wut-libraries"
+    CONFIG_SETTINGS_FILE_LOCATION = pathlib.Path("~") / ".config" / "kicad" / "7.0" / "kicad_common.json"
+    with open(CONFIG_SETTINGS_FILE_LOCATION, 'r') as file:
+        filedata = file.read()
+
+    filedata.replace("<PATH_TO_WUT_LIBRARIES>", str(LIBRARIES_PATH.absolute()))
+
+    with open(CONFIG_SETTINGS_FILE_LOCATION, 'w') as file:
+        file.write(filedata)
+
 
 
 def main(project_folder: pathlib.Path, release_folder: pathlib.Path):
@@ -213,6 +215,7 @@ def main(project_folder: pathlib.Path, release_folder: pathlib.Path):
     )
     # create_kicad_config()
     project_name = discover_kicad_projects(project_folder)
+    load_wut_libraries_path()
     generate_schematic_pdf(
         project_folder / f"{project_name}.kicad_sch", release_folder / "schematic.pdf"
     )
