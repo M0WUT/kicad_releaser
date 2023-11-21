@@ -82,7 +82,6 @@ def generate_board_images(pcb_file: pathlib.Path, output_folder: pathlib.Path):
             pcb_file.absolute(),
             output_folder.absolute()
         ],
-        use_wut_libraries=True,
     )
 
 
