@@ -215,7 +215,7 @@ def main(project_folder: pathlib.Path, release_folder: pathlib.Path):
     )
     # create_kicad_config()
     project_name = discover_kicad_projects(project_folder)
-    load_wut_libraries_path()
+    #load_wut_libraries_path()
     generate_schematic_pdf(
         project_folder / f"{project_name}.kicad_sch", release_folder / "schematic.pdf"
     )
