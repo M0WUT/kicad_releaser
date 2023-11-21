@@ -89,8 +89,7 @@ def generate_board_images(pcb_file: pathlib.Path, output_folder: pathlib.Path):
             "-o",
             "board_front.png",
             pcb_file.absolute(),
-            output_folder.absolute(),
-            "."
+            output_folder.absolute()
         ],
         use_wut_libraries=True,
     )
