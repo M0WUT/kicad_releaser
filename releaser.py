@@ -123,12 +123,10 @@ def generate_webpage(
 
 
 def create_kicad_source(kicad_project: pathlib.Path, output_folder: pathlib.Path):
-    repo = git.Repo(".")
-
     commands = [
         "zip",
         (
-            output_folder / f"{kicad_project.stem}_{repo.head.commit.hexsha[:7]}.zip"
+            output_folder / f"{kicad_project.stem}.zip"
         ).absolute(),
     ]
 
