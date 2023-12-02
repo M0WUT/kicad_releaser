@@ -101,9 +101,9 @@ def generate_webpage(
         "present",
         "boardpage",
         "-d",
-        (top_level_folder.parent() / "README.md").absolute(),
+        (top_level_folder.parent / "README.md").absolute(),
         "--name",
-        top_level_folder.stem(),
+        top_level_folder.stem,
     ]
     for x in project_paths:
         commands.append(
