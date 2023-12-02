@@ -206,7 +206,7 @@ def main(top_level_folder: pathlib.Path, release_folder: pathlib.Path):
     generate_webpage(
         top_level_folder,
         project_paths,
-        release_folder=release_folder,
+        release_folder,
     )
 
 
