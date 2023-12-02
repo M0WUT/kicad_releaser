@@ -41,6 +41,8 @@ jobs:
 
       - run: mkdir -p ~/.config/kicad/7.0
       - run: cp -r kicad_releaser/kicad_settings/* ~/.config/kicad/7.0
+      - run: sed -i "s#PATH_TO_WUT_LIBRARIES#$(readlink -f wut-libraries)#" ~/.config/kicad/7.0/kicad_common.json
+      - run: cat ~/.config/kicad/7.0/kicad_common.json
       - run: mkdir build
 
       - name: Generate Webpage
