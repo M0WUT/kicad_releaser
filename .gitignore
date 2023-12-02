@@ -3,3 +3,4 @@ build
 .venv
 *.png
 temp_schematic.pdf
+*.lck

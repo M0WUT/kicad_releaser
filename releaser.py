@@ -109,7 +109,7 @@ def generate_webpage(
         commands += \
             ["-b", x.stem, "It's alive", x.with_suffix(".kicad_pcb").absolute()]
         
-    commands.append(
+    commands += \
         [
             "--template",
             (pathlib.Path(__file__).parent / "template").absolute(),
@@ -117,7 +117,8 @@ def generate_webpage(
             url,
             output_folder.absolute(),
         ]
-    )
+    print(commands)
+
     run_command(commands)
 
 
@@ -196,9 +197,9 @@ def main(top_level_folder: pathlib.Path, release_folder: pathlib.Path):
     )
     project_paths = discover_kicad_projects(top_level_folder)
     for x in project_paths:
-        # generate_schematic_pdf(
-        #     x, release_folder
-        # )
+        generate_schematic_pdf(
+            x, release_folder
+        )
         create_kicad_source(x, release_folder)
         generate_board_images(x, release_folder)
         create_step_file(x, release_folder)
