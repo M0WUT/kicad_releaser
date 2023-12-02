@@ -8,7 +8,6 @@ import git
 
 
 def run_command(commands: list[str]):
-
     result = subprocess.run(
         commands,
         # capture_output=True,
@@ -19,10 +18,12 @@ def run_command(commands: list[str]):
 def discover_kicad_projects(top_level_folder: pathlib.Path) -> str:
     results = list(top_level_folder.rglob("*.kicad_pro"))
     for x in results:
-        print(f"Found project \"{x.stem}\" in {x.parent.absolute()}")
+        print(f'Found project "{x.stem}" in {x.parent.absolute()}')
 
-    assert len(results) > 0, f"No projects founds in {top_level_folder.absolute()} or its subdirectories"
-    return results  
+    assert (
+        len(results) > 0
+    ), f"No projects founds in {top_level_folder.absolute()} or its subdirectories"
+    return results
 
 
 def generate_schematic_pdf(kicad_project: pathlib.Path, output_folder: pathlib.Path):
@@ -79,33 +80,37 @@ def generate_board_images(kicad_project: pathlib.Path, output_folder: pathlib.Pa
             "6",
             "--ray_tracing",
             "-o",
-            "board_front.png",
+            kicad_project.with_suffix(".png"),
             kicad_project.with_suffix(".kicad_pcb").absolute(),
-            output_folder.absolute()
+            output_folder.absolute(),
         ],
     )
 
 
 def generate_webpage(
-    kicad_project: pathlib.Path, output_folder: pathlib.Path
+    top_level_folder: pathlib.Path,
+    project_paths: list[pathlib.Path],
+    output_folder: pathlib.Path,
 ):
-    repo = git.Repo(kicad_project.parent())
+    repo = git.Repo(top_level_folder)
     url = repo.remotes.origin.url[:-4]  # Remove .git
     print(url)
 
-    run_command(
+    commands = [
+        "kikit",
+        "present",
+        "boardpage",
+        "-d",
+        (top_level_folder.parent() / "README.md").absolute(),
+        "--name",
+        top_level_folder.stem(),
+    ]
+    for x in project_paths:
+        commands.append(
+            ["-b", x.stem(), "It's alive", x.with_suffix(".kicad_pcb").absolute()]
+        )
+    commands.append(
         [
-            "kikit",
-            "present",
-            "boardpage",
-            "-d",
-            (kicad_project.parent() / "README.md").absolute(),
-            "--name",
-            kicad_project.stem(),
-            "-b",
-            kicad_project.stem(),
-            "it's alive",
-            kicad_project.with_suffix(".kicad_pcb").absolute(),
             "--template",
             (pathlib.Path(__file__).parent / "template").absolute(),
             "--repository",
@@ -113,13 +118,10 @@ def generate_webpage(
             output_folder.absolute(),
         ]
     )
+    run_command(commands)
 
 
-
-
-def create_kicad_source(
-    kicad_project: pathlib.Path, output_folder: pathlib.Path
-):
+def create_kicad_source(kicad_project: pathlib.Path, output_folder: pathlib.Path):
     repo = git.Repo(".")
 
     commands = [
@@ -134,9 +136,7 @@ def create_kicad_source(
     run_command(commands)
 
 
-def create_step_file(
-    kicad_project: pathlib.Path, output_folder: pathlib.Path
-):
+def create_step_file(kicad_project: pathlib.Path, output_folder: pathlib.Path):
     run_command(
         [
             "kicad-cli",
@@ -165,9 +165,7 @@ def create_netlist(kicad_project: pathlib.Path, output_folder: pathlib.Path):
     )
 
 
-def create_ibom(
-    kicad_project: pathlib.Path, output_folder: pathlib.Path
-):
+def create_ibom(kicad_project: pathlib.Path, output_folder: pathlib.Path):
     create_netlist(kicad_project, output_folder)
     run_command(
         [
@@ -202,18 +200,13 @@ def main(top_level_folder: pathlib.Path, release_folder: pathlib.Path):
         #     x, release_folder
         # )
         create_kicad_source(x, release_folder)
-        generate_board_images(
-            x, release_folder
-        )
-        create_step_file(
-            x, release_folder
-        )
+        generate_board_images(x, release_folder)
+        create_step_file(x, release_folder)
         create_ibom(x, release_folder)
-    # generate_webpage(
-    #     project_name=project_name,
-    #     kicad_project.parent()=kicad_project.parent(),
-    #     release_folder=release_folder,
-    # )
+    generate_webpage(
+        project_paths,
+        release_folder=release_folder,
+    )
 
 
 if __name__ == "__main__":

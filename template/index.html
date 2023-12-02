@@ -21,36 +21,38 @@
 
         {{{description}}}
 
-        <h1>{{name}}</h1>
+        {{#each boards}}
+            <h1>{{name}}</h1>
 
-   
-        <div class="w-full wrap bg-gray-200 py-3 px-3 my-2 rounded">
-            <div class="w-full">
-                <h3>Front (3D render) (Experimental) </h3>
-                <img src="board_front.png" class="boardPreview">
+    
+            <div class="w-full wrap bg-gray-200 py-3 px-3 my-2 rounded">
+                <div class="w-full">
+                    <h3>Front (3D render) (Experimental) </h3>
+                    <img src="{{this.name}}_front.png" class="boardPreview">
+                </div>
+                <div class="w-full">
+                    <h3>Front (Bare Board) </h3>
+                    <img src="boards/{{this.name}}-front.png" class="boardPreview">
+                </div>
+                <div class="w-full">
+                    <h3>Back (Bare Board) </h3>
+                    <img src="boards/{{this.name}}-back.png" class="boardPreview">
+                </div>
             </div>
-            <div class="w-full">
-                <h3>Front (Bare Board) </h3>
-                <img src="boards/{{name}}-front.png" class="boardPreview">
+            <div class="w-full md:w-1/3 px-4">
+                <h3>Downloads</h3>
+                <p>
+                    <ul>
+                        <li><a href="{{this.name}}.pdf">Download PDF Schematic</a></li>
+                        <li><a href="{{this.name}}_{{gitRevShort}}.zip">Download Kicad Source</a></li>
+                        <li><a href="boards/{{this.name}}-gerbers.zip">Download Gerbers</a></li>
+                        <li><a href="{{this.name}}.step">Download 3D STEP file</a></li>
+                        <li><a href="{{this.name}}.html">Download iBOM file</a></li>
+                    </ul>
+                </p>
+            
             </div>
-            <div class="w-full">
-                <h3>Back (Bare Board) </h3>
-                <img src="boards/{{name}}-back.png" class="boardPreview">
-            </div>
-        </div>
-        <div class="w-full md:w-1/3 px-4">
-            <h3>Downloads</h3>
-            <p>
-                <ul>
-                    <li><a href="schematic.pdf">Download PDF Schematic</a></li>
-                    <li><a href="{{name}}_{{gitRevShort}}.zip">Download Kicad Source</a></li>
-                    <li><a href="boards/{{name}}-gerbers.zip">Download Gerbers</a></li>
-                    <li><a href="{{name}}.step">Download 3D STEP file</a></li>
-                    <li><a href="{{name}}.html">Download iBOM file</a></li>
-                </ul>
-            </p>
-        
-        </div>
+        {{/each}}
     
 
         <div class="w-full mt-16 mb-1 p-2 bg-gray-200 text-center txt-xs rounded">
