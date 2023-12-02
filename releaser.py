@@ -107,7 +107,7 @@ def generate_webpage(
     ]
     for x in project_paths:
         commands.append(
-            ["-b", x.stem(), "It's alive", x.with_suffix(".kicad_pcb").absolute()]
+            ["-b", x.stem, "It's alive", x.with_suffix(".kicad_pcb").absolute()]
         )
     commands.append(
         [
