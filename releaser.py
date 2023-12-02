@@ -106,9 +106,9 @@ def generate_webpage(
         top_level_folder.stem,
     ]
     for x in project_paths:
-        commands.append(
+        commands += \
             ["-b", x.stem, "It's alive", x.with_suffix(".kicad_pcb").absolute()]
-        )
+        
     commands.append(
         [
             "--template",
