@@ -237,4 +237,5 @@
   (lib (name "Layout_WUT")(type "KiCad")(uri "${WUT_LIBRARIES}/Layout_WUT.kicad_sym")(options "")(descr ""))
   (lib (name "Display_WUT")(type "KiCad")(uri "${WUT_LIBRARIES}/Display_WUT.kicad_sym")(options "")(descr ""))
   (lib (name "Regulator_WUT")(type "KiCad")(uri "${WUT_LIBRARIES}/Regulator_WUT.kicad_sym")(options "")(descr ""))
+  (lib (name "Preferred_WUT")(type "KiCad")(uri "${WUT_LIBRARIES}/Preferred_WUT.kicad_sym")(options "")(descr ""))
 )
