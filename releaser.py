@@ -1,13 +1,14 @@
-import sys
+import os
 import pathlib
 import subprocess
+import sys
 import typing
-import os
-import pypdf
+
 import git
+import pypdf
 
 
-def run_command(commands: list[str]):
+def run_command(commands: list[str | pathlib.Path]):
     result = subprocess.run(
         commands,
         # capture_output=True,
@@ -15,7 +16,9 @@ def run_command(commands: list[str]):
     result.check_returncode()
 
 
-def discover_kicad_projects(top_level_folder: pathlib.Path) -> str:
+def discover_kicad_projects(
+    top_level_folder: pathlib.Path,
+) -> list[pathlib.Path]:
     results = list(top_level_folder.rglob("*.kicad_pro"))
     for x in results:
         print(f'Found project "{x.stem}" in {x.parent.absolute()}')
@@ -26,7 +29,9 @@ def discover_kicad_projects(top_level_folder: pathlib.Path) -> str:
     return results
 
 
-def generate_schematic_pdf(kicad_project: pathlib.Path, output_folder: pathlib.Path):
+def generate_schematic_pdf(
+    kicad_project: pathlib.Path, output_folder: pathlib.Path
+):
     temp_schematic_path = pathlib.Path(__file__).parent / "temp_schematic.pdf"
     run_command(
         [
@@ -50,17 +55,22 @@ def generate_schematic_pdf(kicad_project: pathlib.Path, output_folder: pathlib.P
     if "RELEASE:" not in last_commit.message:
         # Load watermark pdfs
         watermark_a3 = pypdf.PdfReader(
-            (pathlib.Path(__file__).parent / "draft_watermark_a3.pdf").absolute()
+            (
+                pathlib.Path(__file__).parent / "draft_watermark_a3.pdf"
+            ).absolute()
         ).pages[0]
 
         watermark_a4 = pypdf.PdfReader(
-            (pathlib.Path(__file__).parent / "draft_watermark_a4.pdf").absolute()
+            (
+                pathlib.Path(__file__).parent / "draft_watermark_a4.pdf"
+            ).absolute()
         ).pages[0]
 
         for page in writer.pages:
             width = page.mediabox.width
-            # I have no idea where these numbers come from - found by printing values
-            # from pages of known sizes
+            # I have no idea where these numbers come from
+            # This was found by printing values from pages
+            # of known sizes
             if width == 1190.52:
                 page.merge_page(watermark_a3, over=False)
             elif width == 841.896:
@@ -71,7 +81,9 @@ def generate_schematic_pdf(kicad_project: pathlib.Path, output_folder: pathlib.P
     writer.write(output_folder / f"{kicad_project.stem}.pdf")
 
 
-def generate_board_images(kicad_project: pathlib.Path, output_folder: pathlib.Path):
+def generate_board_images(
+    kicad_project: pathlib.Path, output_folder: pathlib.Path
+):
     run_command(
         [
             "pcbnew_do",
@@ -106,31 +118,36 @@ def generate_webpage(
         top_level_folder.stem,
     ]
     for x in project_paths:
-        commands += \
-            ["-b", x.stem, "It's alive", x.with_suffix(".kicad_pcb").absolute()]
-        
-    commands += \
-        [
-            "--template",
-            (pathlib.Path(__file__).parent / "template").absolute(),
-            "--repository",
-            url,
-            output_folder.absolute(),
+        commands += [
+            "-b",
+            x.stem,
+            "It's alive",
+            x.with_suffix(".kicad_pcb").absolute(),
         ]
+
+    commands += [
+        "--template",
+        (pathlib.Path(__file__).parent / "template").absolute(),
+        "--repository",
+        url,
+        output_folder.absolute(),
+    ]
     print(commands)
 
     run_command(commands)
 
 
-def create_kicad_source(kicad_project: pathlib.Path, output_folder: pathlib.Path):
+def create_kicad_source(
+    kicad_project: pathlib.Path, output_folder: pathlib.Path
+):
     commands = [
         "zip",
-        (
-            output_folder / f"{kicad_project.stem}.zip"
-        ).absolute(),
+        (output_folder / f"{kicad_project.stem}.zip").absolute(),
     ]
 
-    commands += [x for x in (kicad_project.parent).glob("*") if not ".git" in str(x)]
+    commands += [
+        x for x in (kicad_project.parent).glob("*") if ".git" not in str(x)
+    ]
 
     run_command(commands)
 
@@ -195,9 +212,7 @@ def main(top_level_folder: pathlib.Path, release_folder: pathlib.Path):
     )
     project_paths = discover_kicad_projects(top_level_folder)
     for x in project_paths:
-        generate_schematic_pdf(
-            x, release_folder
-        )
+        generate_schematic_pdf(x, release_folder)
         create_kicad_source(x, release_folder)
         generate_board_images(x, release_folder)
         create_step_file(x, release_folder)
