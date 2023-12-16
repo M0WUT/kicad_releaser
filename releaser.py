@@ -105,8 +105,10 @@ def generate_webpage(
     output_folder: pathlib.Path,
 ):
     repo = git.Repo(top_level_folder)
-    url = repo.remotes.origin.url[:-4]  # Remove .git
-    print(url)
+
+    url = repo.remotes.origin.url
+    if url.endswith(".git"):
+        url = url[:-4]
 
     commands = [
         "kikit",
@@ -192,7 +194,7 @@ def create_ibom(kicad_project: pathlib.Path, output_folder: pathlib.Path):
             "all",
             "--no-browser",
             "--blacklist",
-            "JP*,LAYOUT*,H*",
+            "JP*,LAYOUT*",
             "--extra-fields",
             "Manufacturer,MPN",
             "--dest-dir",
