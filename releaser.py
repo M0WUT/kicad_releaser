@@ -11,7 +11,7 @@ import pypdf
 def run_command(commands: list[str | pathlib.Path]):
     result = subprocess.run(
         commands,
-        # capture_output=True,
+        capture_output=True,
     )
     result.check_returncode()
 
@@ -134,7 +134,7 @@ def generate_webpage(
         url,
         output_folder.absolute(),
     ]
-    print(commands)
+    
 
     run_command(commands)
 
