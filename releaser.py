@@ -9,11 +9,10 @@ import pypdf
 
 
 def run_command(commands: list[str | pathlib.Path]):
-    result = subprocess.run(
+    subprocess.check_call(
         commands,
         #capture_output=True,
     )
-    result.check_returncode()
 
 
 def discover_kicad_projects(
@@ -109,6 +108,16 @@ def generate_webpage(
     url = repo.remotes.origin.url
     if url.endswith(".git"):
         url = url[:-4]
+
+    commands = [
+        "pcbdraw",
+        "plot",
+        "--vcuts=Cmts.User",
+        "--side=front",
+        project_paths[0].with_suffix(".kicad_pcb").absolute(),
+        "./test.png"
+
+    ]
 
     commands = [
         "kikit",

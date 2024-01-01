@@ -39,6 +39,9 @@ jobs:
       - name: Install Python dependencies
         run: pip install -r kicad_releaser/requirements.txt
 
+      - name: Print Dependency versions
+        run: pip freeze
+
       - run: mkdir -p ~/.config/kicad/7.0
       - run: cp -r kicad_releaser/kicad_settings/* ~/.config/kicad/7.0
       - run: sed -i "s#PATH_TO_WUT_LIBRARIES#$(readlink -f wut-libraries)#" ~/.config/kicad/7.0/kicad_common.json
