@@ -118,6 +118,7 @@ def generate_webpage(
         "./test.png"
 
     ]
+    run_command(commands)
 
     commands = [
         "kikit",
