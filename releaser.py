@@ -11,7 +11,7 @@ import pypdf
 def run_command(commands: list[str | pathlib.Path]):
     result = subprocess.run(
         commands,
-        capture_output=True,
+        #capture_output=True,
     )
     result.check_returncode()
 
@@ -117,7 +117,7 @@ def generate_webpage(
         "-d",
         (top_level_folder.parent / "README.md").absolute(),
         "--name",
-        top_level_folder.stem,
+        top_level_folder.absolute().stem,
     ]
     for x in project_paths:
         commands += [
