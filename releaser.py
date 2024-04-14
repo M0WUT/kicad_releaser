@@ -226,7 +226,7 @@ def main(top_level_folder: pathlib.Path, release_folder: pathlib.Path):
     for x in project_paths:
         generate_schematic_pdf(x, release_folder)
         create_kicad_source(x, release_folder)
-        generate_board_images(x, release_folder)
+        #generate_board_images(x, release_folder)
         create_step_file(x, release_folder)
         create_ibom(x, release_folder)
     generate_webpage(
