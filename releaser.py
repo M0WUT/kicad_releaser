@@ -109,16 +109,16 @@ def generate_webpage(
     if url.endswith(".git"):
         url = url[:-4]
 
-    # commands = [
-    #     "pcbdraw",
-    #     "plot",
-    #     "--vcuts=Cmts.User",
-    #     "--side=front",
-    #     project_paths[0].with_suffix(".kicad_pcb").absolute(),
-    #     "./test.png"
+    commands = [
+        "pcbdraw",
+        "plot",
+        "--vcuts=Cmts.User",
+        "--side=front",
+        project_paths[0].with_suffix(".kicad_pcb").absolute(),
+        "./test.png"
 
-    # ]
-    # run_command(commands)
+    ]
+    run_command(commands)
 
     commands = [
         "kikit",
