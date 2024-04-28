@@ -5,14 +5,15 @@ on:
 jobs:
   build-artifacts:
     runs-on: ubuntu-latest
+    image: kicad:nightly-202404
     steps:
-      - name: Install Kicad
-        run: |
-          sudo add-apt-repository --yes ppa:kicad/kicad-7.0-releases
-          sudo apt update
-          sudo apt install kicad
-      - name: Install 3rd party programs
-        run: sudo apt install make cmark xsltproc librsvg2-bin xdotool
+      # - name: Install Kicad
+      #   run: |
+      #     sudo add-apt-repository --yes ppa:kicad/kicad-7.0-releases
+      #     sudo apt update
+      #     sudo apt install kicad
+      # - name: Install 3rd party programs
+      #   run: sudo apt install make cmark xsltproc librsvg2-bin xdotool
       - name: Checkout project repo
         uses: actions/checkout@v4
         with:
@@ -48,16 +49,16 @@ jobs:
       - run: cat ~/.config/kicad/7.0/kicad_common.json
       - run: mkdir build
 
-      - name: Generate Webpage
-        uses: coactions/setup-xvfb@v1
-        with:
-          run: python ../kicad_releaser/releaser.py . ../build
-          working-directory: main
+      # - name: Generate Webpage
+      #   uses: coactions/setup-xvfb@v1
+      #   with:
+      #     run: python ../kicad_releaser/releaser.py . ../build
+      #     working-directory: main
           
-      - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v2
-        with:
-          path: build/
+      # - name: Upload Pages artifact
+      #   uses: actions/upload-pages-artifact@v2
+      #   with:
+      #     path: build/
 
   # Deploy job
   deploy:
