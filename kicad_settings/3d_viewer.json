@@ -2,6 +2,10 @@
   "appearance": {
     "color_theme": "_builtin_default"
   },
+  "aui": {
+    "right_panel_width": -1,
+    "show_layer_manager": true
+  },
   "camera": {
     "animation_enabled": true,
     "moving_speed_multiplier": 3,
@@ -17,6 +21,7 @@
     "on_selection": true,
     "zoom_to_fit": true
   },
+  "current_layer_preset": "legacy_preset_flag",
   "find_replace": {
     "find_history": [],
     "find_string": "",
@@ -31,12 +36,14 @@
     "highlight_factor": 0.5,
     "select_factor": 0.75
   },
+  "layer_presets": [],
   "lib_tree": {
     "column_widths": null,
-    "columns": []
+    "columns": [],
+    "open_libs": []
   },
   "meta": {
-    "version": 2
+    "version": 3
   },
   "printing": {
     "background": false,
@@ -60,6 +67,7 @@
     "opengl_render_bbox_only_OnMove": false,
     "opengl_selection_color": "rgb(0, 255, 0)",
     "opengl_show_model_bbox": false,
+    "opengl_show_off_board_silk": false,
     "opengl_thickness_disableOnMove": false,
     "opengl_vias_disableOnMove": false,
     "plated_and_bare_copper": false,
@@ -111,18 +119,27 @@
     "raytrace_spread_reflections": 0.02500000037252903,
     "raytrace_spread_refractions": 0.02500000037252903,
     "raytrace_spread_shadows": 0.05000000074505806,
-    "realistic": true,
     "show_adhesive": true,
     "show_axis": true,
     "show_board_body": true,
     "show_comments": true,
-    "show_eco": true,
+    "show_copper_bottom": true,
+    "show_copper_top": true,
+    "show_drawings": true,
+    "show_eco1": true,
+    "show_eco2": true,
+    "show_footprints_dnp": false,
     "show_footprints_insert": true,
     "show_footprints_normal": true,
     "show_footprints_not_in_posfile": true,
     "show_footprints_virtual": true,
-    "show_silkscreen": true,
-    "show_soldermask": true,
+    "show_fp_references": true,
+    "show_fp_text": true,
+    "show_fp_values": true,
+    "show_silkscreen_bottom": true,
+    "show_silkscreen_top": true,
+    "show_soldermask_bottom": true,
+    "show_soldermask_top": true,
     "show_solderpaste": true,
     "show_zones": true,
     "subtract_mask_from_silk": false
@@ -130,11 +147,12 @@
   "system": {
     "file_history": [],
     "first_run_shown": false,
-    "last_imperial_units": 0,
+    "last_imperial_units": 5,
     "last_metric_units": 1,
     "max_undo_items": 0,
     "units": 1
   },
+  "use_stackup_colors": true,
   "window": {
     "cursor": {
       "always_show_cursor": true,
@@ -143,48 +161,147 @@
     "display": 0,
     "grid": {
       "axes_enabled": false,
-      "fast_grid_1": 4,
-      "fast_grid_2": 5,
-      "last_size": 4,
+      "fast_grid_1": 15,
+      "fast_grid_2": 16,
+      "last_size": 15,
       "line_width": 1.0,
       "min_spacing": 10.0,
+      "override_connected": false,
+      "override_connected_idx": 16,
+      "override_graphics": false,
+      "override_graphics_idx": 15,
+      "override_text": false,
+      "override_text_idx": 18,
+      "override_vias": false,
+      "override_vias_idx": 18,
+      "override_wires": false,
+      "override_wires_idx": 19,
+      "overrides_enabled": false,
       "show": true,
       "sizes": [
-        "1000 mil",
-        "500 mil",
-        "250 mil",
-        "200 mil",
-        "100 mil",
-        "50 mil",
-        "25 mil",
-        "20 mil",
-        "10 mil",
-        "5 mil",
-        "2 mil",
-        "1 mil",
-        "5.0 mm",
-        "2.5 mm",
-        "1.0 mm",
-        "0.5 mm",
-        "0.25 mm",
-        "0.2 mm",
-        "0.1 mm",
-        "0.05 mm",
-        "0.025 mm",
-        "0.01 mm"
+        {
+          "name": "",
+          "x": "1000 mil",
+          "y": "1000 mil"
+        },
+        {
+          "name": "",
+          "x": "500 mil",
+          "y": "500 mil"
+        },
+        {
+          "name": "",
+          "x": "250 mil",
+          "y": "250 mil"
+        },
+        {
+          "name": "",
+          "x": "200 mil",
+          "y": "200 mil"
+        },
+        {
+          "name": "",
+          "x": "100 mil",
+          "y": "100 mil"
+        },
+        {
+          "name": "",
+          "x": "50 mil",
+          "y": "50 mil"
+        },
+        {
+          "name": "",
+          "x": "25 mil",
+          "y": "25 mil"
+        },
+        {
+          "name": "",
+          "x": "20 mil",
+          "y": "20 mil"
+        },
+        {
+          "name": "",
+          "x": "10 mil",
+          "y": "10 mil"
+        },
+        {
+          "name": "",
+          "x": "5 mil",
+          "y": "5 mil"
+        },
+        {
+          "name": "",
+          "x": "2 mil",
+          "y": "2 mil"
+        },
+        {
+          "name": "",
+          "x": "1 mil",
+          "y": "1 mil"
+        },
+        {
+          "name": "",
+          "x": "5.0 mm",
+          "y": "5.0 mm"
+        },
+        {
+          "name": "",
+          "x": "2.5 mm",
+          "y": "2.5 mm"
+        },
+        {
+          "name": "",
+          "x": "1.0 mm",
+          "y": "1.0 mm"
+        },
+        {
+          "name": "",
+          "x": "0.5 mm",
+          "y": "0.5 mm"
+        },
+        {
+          "name": "",
+          "x": "0.25 mm",
+          "y": "0.25 mm"
+        },
+        {
+          "name": "",
+          "x": "0.2 mm",
+          "y": "0.2 mm"
+        },
+        {
+          "name": "",
+          "x": "0.1 mm",
+          "y": "0.1 mm"
+        },
+        {
+          "name": "",
+          "x": "0.05 mm",
+          "y": "0.05 mm"
+        },
+        {
+          "name": "",
+          "x": "0.025 mm",
+          "y": "0.025 mm"
+        },
+        {
+          "name": "",
+          "x": "0.01 mm",
+          "y": "0.01 mm"
+        }
       ],
       "snap": 0,
       "style": 0,
-      "user_grid_x": "10 mil",
-      "user_grid_y": "10 mil"
+      "user_grid_x": "",
+      "user_grid_y": ""
     },
     "maximized": false,
     "mru_path": "",
-    "perspective": "layout2|name=MainToolbar;caption=;state=139632;dir=1;layer=6;row=0;pos=0;prop=100000;bestw=1158;besth=38;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=InfoBar;caption=;state=131454;dir=1;layer=1;row=0;pos=0;prop=100000;bestw=20;besth=30;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=DrawFrame;caption=;state=1020;dir=5;layer=0;row=0;pos=0;prop=100000;bestw=1280;besth=661;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|dock_size(1,6,0)=38|dock_size(5,0,0)=384|",
-    "pos_x": 355,
-    "pos_y": 193,
-    "size_x": 1280,
-    "size_y": 720,
+    "perspective": "",
+    "pos_x": 0,
+    "pos_y": 0,
+    "size_x": 0,
+    "size_y": 0,
     "zoom_factors": []
   }
 }
