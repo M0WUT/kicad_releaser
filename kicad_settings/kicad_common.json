@@ -23,7 +23,9 @@
     "zone_fill_warning": false
   },
   "environment": {
-    "vars": null
+    "vars": {
+      "WUT_LIBRARIES": "<PATH_TO_WUT_LIBRARIES>"
+    }
   },
   "git": {
     "authorEmail": "",
