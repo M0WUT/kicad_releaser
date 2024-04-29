@@ -4,15 +4,15 @@
     "color_theme": "_builtin_default"
   },
   "aui": {
-    "appearance_expand_layer_display": false,
+    "appearance_expand_layer_display": true,
     "appearance_expand_net_display": false,
     "appearance_panel_tab": 0,
     "properties_panel_width": 20,
     "properties_splitter_proportion": 0.5,
     "right_panel_width": 270,
     "search_panel_dock_direction": 3,
-    "search_panel_height": 45,
-    "search_panel_width": 214,
+    "search_panel_height": 40,
+    "search_panel_width": 177,
     "show_layer_manager": true,
     "show_properties": false,
     "show_search": false
@@ -49,8 +49,8 @@
     "flip_left_right": true,
     "magnetic_all_layers": false,
     "magnetic_graphics": true,
-    "magnetic_pads": 1,
-    "magnetic_tracks": 1,
+    "magnetic_pads": 2,
+    "magnetic_tracks": 2,
     "pcb_use_45_degree_limit": false,
     "polar_coords": false,
     "rotation_angle": 900,
@@ -111,12 +111,12 @@
   },
   "footprint_chooser": {
     "filter_on_pin_count": false,
-    "height": -1,
-    "sash_h": -1,
-    "sash_v": -1,
+    "height": 850,
+    "sash_h": 550,
+    "sash_v": 575,
     "sort_mode": 0,
     "use_fp_filters": false,
-    "width": -1
+    "width": 1100
   },
   "footprint_viewer": {
     "autozoom": true,
@@ -444,12 +444,12 @@
     "select_factor": 0.75
   },
   "import_graphics": {
-    "dxf_units": 0,
+    "dxf_units": 2,
     "fix_discontinuities": true,
     "group_items": true,
     "interactive_placement": true,
     "layer": 40,
-    "line_width": 0.2,
+    "line_width": 0.1,
     "line_width_units": 0,
     "origin_units": 0,
     "origin_x": 0.0,
@@ -458,9 +458,17 @@
     "use_dlg_layer_selection": true
   },
   "lib_tree": {
-    "column_widths": null,
-    "columns": [],
-    "open_libs": []
+    "column_widths": {
+      "Description": 301,
+      "Item": 300
+    },
+    "columns": [
+      "Item",
+      "Description"
+    ],
+    "open_libs": [
+      "Capacitor_SMD"
+    ]
   },
   "meta": {
     "version": 5
@@ -481,7 +489,7 @@
     "associate_by_ref_sch": false,
     "delete_extra_footprints": false,
     "delete_shorting_tracks": false,
-    "report_filter": -1,
+    "report_filter": 29,
     "update_footprints": true
   },
   "pcb_display": {
@@ -556,11 +564,12 @@
   },
   "system": {
     "file_history": [
-      "C:\\Users\\dan\\Documents\\kicad_wut\\projects\\Master-Timing-Reference\\Master Timing Card.kicad_pcb"
+      "C:\\Users\\dan\\Documents\\kicad_wut\\projects\\Master-Timing-Reference\\Master Timing Card.kicad_pcb",
+      "C:\\Users\\dan\\Documents\\kicad_wut\\projects\\Master-Timing-Reference\\front panel\\front panel\\front panel.kicad_pcb"
     ],
     "first_run_shown": false,
-    "last_footprint3d_dir": "",
-    "last_footprint_lib_dir": "C:\\Users\\dan\\Documents\\KiCad\\8.0\\footprints",
+    "last_footprint3d_dir": "C:\\Users\\dan\\AppData\\Local\\Programs\\KiCad\\8.0\\share\\kicad\\3dmodels\\",
+    "last_footprint_lib_dir": "C:\\Users\\dan\\Documents\\kicad_wut\\kicad_libraries",
     "last_imperial_units": 5,
     "last_metric_units": 1,
     "max_undo_items": 0,
@@ -607,7 +616,7 @@
       "axes_enabled": false,
       "fast_grid_1": 15,
       "fast_grid_2": 16,
-      "last_size": 15,
+      "last_size": 21,
       "line_width": 1.0,
       "min_spacing": 10.0,
       "override_connected": false,
@@ -741,11 +750,11 @@
     },
     "maximized": true,
     "mru_path": "",
-    "perspective": "layout2|name=InfoBar;caption=;state=131454;dir=1;layer=1;row=0;pos=0;prop=100000;bestw=30;besth=45;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=MainToolbar;caption=;state=139632;dir=1;layer=6;row=0;pos=0;prop=100000;bestw=1524;besth=52;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=AuxToolbar;caption=;state=139644;dir=1;layer=5;row=0;pos=0;prop=100000;bestw=1200;besth=52;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=MsgPanel;caption=;state=131452;dir=3;layer=6;row=0;pos=0;prop=100000;bestw=578;besth=50;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=OptToolbar;caption=;state=139596;dir=4;layer=3;row=0;pos=0;prop=100000;bestw=52;besth=998;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=ToolsToolbar;caption=;state=139596;dir=2;layer=3;row=0;pos=0;prop=100000;bestw=52;besth=1020;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=LayersManager;caption=Appearance;state=1532;dir=2;layer=4;row=0;pos=0;prop=100000;bestw=270;besth=-1;minw=270;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=SelectionFilter;caption=Selection Filter;state=1532;dir=2;layer=4;row=0;pos=1;prop=0;bestw=270;besth=-1;minw=270;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=PropertiesManager;caption=Properties;state=1534;dir=4;layer=5;row=0;pos=0;prop=100000;bestw=450;besth=300;minw=360;minh=90;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=DrawFrame;caption=;state=1020;dir=5;layer=0;row=0;pos=0;prop=100000;bestw=578;besth=236;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=Search;caption=Search;state=2098686;dir=3;layer=0;row=0;pos=0;prop=100000;bestw=270;besth=150;minw=270;minh=90;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=720;floath=300|dock_size(1,6,0)=52|dock_size(1,5,0)=52|dock_size(3,6,0)=50|dock_size(4,3,0)=52|dock_size(2,3,0)=52|dock_size(2,4,0)=270|dock_size(5,0,0)=569|",
-    "pos_x": -11,
-    "pos_y": -11,
-    "size_x": 1942,
-    "size_y": 1030,
+    "perspective": "layout2|name=InfoBar;caption=;state=131454;dir=1;layer=1;row=0;pos=0;prop=100000;bestw=25;besth=37;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=MainToolbar;caption=;state=139632;dir=1;layer=6;row=0;pos=0;prop=100000;bestw=1288;besth=44;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=AuxToolbar;caption=;state=139644;dir=1;layer=5;row=0;pos=0;prop=100000;bestw=1009;besth=44;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=MsgPanel;caption=;state=131452;dir=3;layer=6;row=0;pos=0;prop=100000;bestw=482;besth=40;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=OptToolbar;caption=;state=139596;dir=4;layer=3;row=0;pos=0;prop=100000;bestw=44;besth=842;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=ToolsToolbar;caption=;state=139596;dir=2;layer=3;row=0;pos=0;prop=100000;bestw=44;besth=856;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=LayersManager;caption=Appearance;state=1532;dir=2;layer=4;row=0;pos=0;prop=100000;bestw=225;besth=-1;minw=225;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=SelectionFilter;caption=Selection Filter;state=1532;dir=2;layer=4;row=0;pos=1;prop=0;bestw=225;besth=-1;minw=225;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=PropertiesManager;caption=Properties;state=1534;dir=4;layer=5;row=0;pos=0;prop=100000;bestw=375;besth=250;minw=300;minh=75;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=DrawFrame;caption=;state=1020;dir=5;layer=0;row=0;pos=0;prop=100000;bestw=482;besth=198;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=Search;caption=Search;state=2098686;dir=3;layer=0;row=0;pos=0;prop=100000;bestw=225;besth=125;minw=225;minh=75;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=600;floath=250|dock_size(1,6,0)=44|dock_size(1,5,0)=44|dock_size(3,6,0)=40|dock_size(4,3,0)=44|dock_size(2,3,0)=44|dock_size(2,4,0)=270|dock_size(5,0,0)=484|",
+    "pos_x": -9,
+    "pos_y": -9,
+    "size_x": 1938,
+    "size_y": 1038,
     "zoom_factors": [
       0.13,
       0.22,

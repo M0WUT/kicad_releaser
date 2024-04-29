@@ -47,7 +47,7 @@
     "origin_x": 0.0,
     "origin_y": 0.0
   },
-  "lib_table_width": 250,
+  "lib_table_width": 450,
   "lib_tree": {
     "column_widths": null,
     "columns": [],
@@ -92,7 +92,7 @@
     },
     "display": 0,
     "grid": {
-      "axes_enabled": false,
+      "axes_enabled": true,
       "fast_grid_1": 1,
       "fast_grid_2": 2,
       "last_size": 1,
@@ -139,11 +139,33 @@
     },
     "maximized": false,
     "mru_path": "",
-    "perspective": "",
+    "perspective": "layout2|name=InfoBar;caption=;state=131454;dir=1;layer=1;row=0;pos=0;prop=100000;bestw=30;besth=45;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=MainToolbar;caption=;state=139644;dir=1;layer=6;row=0;pos=0;prop=100000;bestw=1246;besth=52;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=MsgPanel;caption=;state=131452;dir=3;layer=6;row=0;pos=0;prop=100000;bestw=578;besth=50;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=SymbolTree;caption=Libraries;state=1996;dir=4;layer=3;row=0;pos=0;prop=100000;bestw=375;besth=-1;minw=375;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=PropertiesManager;caption=Properties;state=2099148;dir=4;layer=3;row=0;pos=1;prop=100000;bestw=450;besth=300;minw=360;minh=90;maxw=-1;maxh=-1;floatx=75;floaty=300;floatw=450;floath=600|name=OptToolbar;caption=;state=139596;dir=4;layer=2;row=0;pos=0;prop=100000;bestw=52;besth=570;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=ToolsToolbar;caption=;state=139596;dir=2;layer=2;row=0;pos=0;prop=100000;bestw=52;besth=561;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=DrawFrame;caption=;state=768;dir=5;layer=0;row=0;pos=0;prop=100000;bestw=578;besth=236;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|dock_size(1,6,0)=52|dock_size(3,6,0)=50|dock_size(4,3,0)=452|dock_size(4,2,0)=52|dock_size(2,2,0)=52|dock_size(5,0,0)=569|",
     "pos_x": 0,
     "pos_y": 0,
-    "size_x": 0,
-    "size_y": 0,
-    "zoom_factors": []
+    "size_x": 1920,
+    "size_y": 1080,
+    "zoom_factors": [
+      0.05,
+      0.07,
+      0.1,
+      0.15,
+      0.2,
+      0.3,
+      0.5,
+      0.7,
+      1.0,
+      1.5,
+      2.0,
+      3.0,
+      4.5,
+      6.5,
+      10.0,
+      15.0,
+      20.0,
+      30.0,
+      45.0,
+      65.0,
+      100.0
+    ]
   }
 }

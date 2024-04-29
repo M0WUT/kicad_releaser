@@ -48,7 +48,7 @@
     "title_block": false,
     "use_theme": false
   },
-  "properties_frame_width": 150,
+  "properties_frame_width": 225,
   "system": {
     "file_history": [],
     "first_run_shown": false,
@@ -199,13 +199,34 @@
       "user_grid_x": "",
       "user_grid_y": ""
     },
-    "maximized": false,
+    "maximized": true,
     "mru_path": "",
-    "perspective": "",
-    "pos_x": 0,
-    "pos_y": 0,
-    "size_x": 0,
-    "size_y": 0,
-    "zoom_factors": []
+    "perspective": "layout2|name=InfoBar;caption=;state=131454;dir=1;layer=1;row=0;pos=0;prop=100000;bestw=30;besth=45;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=MainToolbar;caption=;state=139632;dir=1;layer=6;row=0;pos=0;prop=100000;bestw=1187;besth=52;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=OptToolbar;caption=;state=139596;dir=4;layer=3;row=0;pos=0;prop=100000;bestw=52;besth=209;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=MsgPanel;caption=;state=131452;dir=3;layer=6;row=0;pos=0;prop=100000;bestw=578;besth=50;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=ToolsToolbar;caption=;state=139596;dir=2;layer=2;row=0;pos=0;prop=100000;bestw=52;besth=374;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=Props;caption=Properties;state=2044;dir=2;layer=3;row=0;pos=0;prop=100000;bestw=150;besth=-1;minw=225;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=DrawFrame;caption=;state=1020;dir=5;layer=0;row=0;pos=0;prop=100000;bestw=578;besth=236;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|dock_size(1,6,0)=52|dock_size(4,3,0)=52|dock_size(3,6,0)=50|dock_size(2,2,0)=52|dock_size(2,3,0)=227|dock_size(5,0,0)=569|",
+    "pos_x": -11,
+    "pos_y": -11,
+    "size_x": 1942,
+    "size_y": 1030,
+    "zoom_factors": [
+      0.022,
+      0.035,
+      0.05,
+      0.08,
+      0.13,
+      0.22,
+      0.35,
+      0.6,
+      1.0,
+      2.2,
+      3.5,
+      5.0,
+      8.0,
+      13.0,
+      22.0,
+      35.0,
+      50.0,
+      80.0,
+      130.0,
+      220.0
+    ]
   }
 }

@@ -1,7 +1,6 @@
 {
   "appearance": {
-    "color_theme": "_builtin_default",
-    "left_frame_width": 375
+    "color_theme": "_builtin_default"
   },
   "color_picker": {
     "default_tab": 0
@@ -34,19 +33,6 @@
   "meta": {
     "version": 0
   },
-  "pcm": {
-    "check_for_updates": true,
-    "last_download_dir": "",
-    "lib_auto_add": true,
-    "lib_auto_remove": true,
-    "lib_prefix": "PCM_",
-    "repositories": [
-      {
-        "name": "KiCad official repository",
-        "url": "https://repository.kicad.org/repository.json"
-      }
-    ]
-  },
   "printing": {
     "background": false,
     "color_theme": "",
@@ -57,20 +43,11 @@
     "use_theme": false
   },
   "system": {
-    "check_for_kicad_updates": true,
-    "file_history": [
-      "C:\\Users\\dan\\Documents\\kicad_wut\\projects\\Master-Timing-Reference\\Master Timing Card.kicad_pro",
-      "C:\\Users\\dan\\Documents\\kicad_wut\\projects\\Master-Timing-Reference\\front panel\\front panel\\front panel.kicad_pro"
-    ],
+    "file_history": [],
     "first_run_shown": false,
     "last_imperial_units": 5,
     "last_metric_units": 1,
-    "last_received_update": "",
-    "last_update_check_time": "2024-04-28T20:56:44",
     "max_undo_items": 0,
-    "open_projects": [
-      "C:\\Users\\dan\\Documents\\kicad_wut\\projects\\Master-Timing-Reference\\Master Timing Card.kicad_pro"
-    ],
     "units": 1
   },
   "window": {
@@ -215,13 +192,13 @@
       "user_grid_x": "",
       "user_grid_y": ""
     },
-    "maximized": true,
-    "mru_path": "C:\\Users\\dan\\Documents\\kicad_wut\\projects\\Master-Timing-Reference\\",
-    "perspective": "layout2|name=MainToolbar;caption=;state=139644;dir=4;layer=2;row=0;pos=0;prop=100000;bestw=282;besth=44;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=ProjectTree;caption=Project Files;state=1532;dir=4;layer=1;row=0;pos=0;prop=100000;bestw=375;besth=-1;minw=313;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|name=Launcher;caption=Editors;state=508;dir=5;layer=0;row=0;pos=0;prop=100000;bestw=605;besth=560;minw=605;minh=560;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1|dock_size(4,2,0)=282|dock_size(4,1,0)=375|dock_size(5,0,0)=605|",
-    "pos_x": -18,
-    "pos_y": -18,
-    "size_x": 1938,
-    "size_y": 1038,
+    "maximized": false,
+    "mru_path": "",
+    "perspective": "",
+    "pos_x": 0,
+    "pos_y": 0,
+    "size_x": 0,
+    "size_y": 0,
     "zoom_factors": []
   }
 }
