@@ -112,16 +112,16 @@ def generate_webpage(
     if url.endswith(".git"):
         url = url[:-4]
 
-    commands = [
-        "pcbdraw",
-        "plot",
-        "--vcuts=Cmts.User",
-        "--side=front",
-        project_paths[0].with_suffix(".kicad_pcb").absolute(),
-        "./test.png"
+    # commands = [
+    #     "pcbdraw",
+    #     "plot",
+    #     "--vcuts=Cmts.User",
+    #     "--side=front",
+    #     project_paths[0].with_suffix(".kicad_pcb").absolute(),
+    #     "./test.png"
 
-    ]
-    run_command(commands)
+    # ]
+    # run_command(commands)
 
     commands = [
         "kikit",
@@ -227,10 +227,10 @@ def main(top_level_folder: pathlib.Path, release_folder: pathlib.Path):
     )
     project_paths = discover_kicad_projects(top_level_folder)
     for x in project_paths:
-        generate_schematic_pdf(x, release_folder)
-        create_kicad_source(x, release_folder)
+        # generate_schematic_pdf(x, release_folder)
+        # create_kicad_source(x, release_folder)
         generate_board_images(x, release_folder)
-        create_step_file(x, release_folder)
+        # create_step_file(x, release_folder)
         create_ibom(x, release_folder)
     generate_webpage(
         top_level_folder,
