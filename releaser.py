@@ -83,19 +83,22 @@ def generate_schematic_pdf(
 def generate_board_images(
     kicad_project: pathlib.Path, output_folder: pathlib.Path
 ):
-    run_command(
-        [
-            "pcbnew_do",
-            "3d_view",
-            "-z",
-            "4",
-            "--ray_tracing",
-            "-o",
-            f"{kicad_project.stem}.png",
-            kicad_project.with_suffix(".kicad_pcb").absolute(),
-            output_folder.absolute(),
-        ],
-    )
+    for side in ["front", "back"]:
+        run_command(
+            [
+                "kicad-cli",
+                "pcb",
+                "render",
+                "--side",
+                f"{'top' if side == "front" else 'bottom'}",
+                "--background",
+                "opaque",
+                "-o"
+                (output_folder / f"{side}_render.png").absolute(),
+                kicad_project.with_suffix(".kicad_pcb").absolute(),
+                
+            ],
+        )
 
 
 def generate_webpage(
@@ -226,7 +229,7 @@ def main(top_level_folder: pathlib.Path, release_folder: pathlib.Path):
     for x in project_paths:
         generate_schematic_pdf(x, release_folder)
         create_kicad_source(x, release_folder)
-        #generate_board_images(x, release_folder)
+        generate_board_images(x, release_folder)
         create_step_file(x, release_folder)
         create_ibom(x, release_folder)
     generate_webpage(
