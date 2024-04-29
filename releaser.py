@@ -200,7 +200,6 @@ def create_ibom(kicad_project: pathlib.Path, output_folder: pathlib.Path):
     create_netlist(kicad_project, output_folder)
     run_command(
         [
-            "DISPLAY=:1"
             "python3",
             "../ibom/InteractiveHtmlBom/generate_interactive_bom.py",
             "--dark-mode",
