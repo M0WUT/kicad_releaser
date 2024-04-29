@@ -90,7 +90,7 @@ def generate_board_images(
                 "pcb",
                 "render",
                 "--side",
-                f"{'top' if side == "front" else 'bottom'}",
+                f"{'top' if side == 'front' else 'bottom'}",
                 "--background",
                 "opaque",
                 "-o"
