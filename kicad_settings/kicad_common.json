@@ -24,7 +24,7 @@
   },
   "environment": {
     "vars": {
-      "WUT_LIBRARIES": "C:\\Users\\dan\\Documents\\kicad_wut\\kicad_libraries"
+      "WUT_LIBRARIES": "PATH_TO_WUT_LIBRARIES"
     }
   },
   "git": {
