@@ -113,7 +113,7 @@ def generate_webpage(
     if url.endswith(".git"):
         url = url[:-4]
 
-    outdir=output_folder.absolute(),
+    outdir=str(output_folder.absolute())
     resources = []
 
     pathlib.Path(outdir).mkdir(parents=True, exist_ok=True)
