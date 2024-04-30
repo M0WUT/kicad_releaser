@@ -129,10 +129,9 @@ table {
     border-collapse: collapse
 }
 
-tbody td {
-    padding-top: 5px;
-    padding-bottom: 5px;
-    overflow-x: scroll;
+tbody td, th {
+    padding: 5px;
+    overflow-x: hidden;
 }
 
 tbody tr:nth-child(even) {
