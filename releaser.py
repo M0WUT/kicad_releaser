@@ -113,25 +113,14 @@ def generate_webpage(
     if url.endswith(".git"):
         url = url[:-4]
 
-    boardpage(
-        
-        description=str((top_level_folder.parent / "README.md").absolute()),
-        board=,
-        resource=[],
-        template=(pathlib.Path(__file__).parent / "template").absolute(),
-        repository=url,
-        name=top_level_folder.absolute().stem,
-        
-        
-    )
     outdir=output_folder.absolute(),
     resources = []
 
     pathlib.Path(outdir).mkdir(parents=True, exist_ok=True)
-    template = readTemplate(template)
+    template = readTemplate((pathlib.Path(__file__).parent / "template").absolute())
     template.addDescriptionFile(str((top_level_folder.parent / "README.md").absolute()))
     template.setRepository(url)
-    template.setName(name)
+    template.setName(top_level_folder.absolute().stem)
     for r in resources:
         template.addResource(r)
     for name, comment, file in [(x.stem,
