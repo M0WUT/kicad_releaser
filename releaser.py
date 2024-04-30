@@ -4,7 +4,7 @@ import subprocess
 import sys
 import typing
 import markdown2
-from kikit.present import boardpage, readTemplate
+from kikit.present import readTemplate
 
 import git
 import pypdf

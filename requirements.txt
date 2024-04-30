@@ -3,3 +3,4 @@ mistune==2.0.5
 pypdf
 GitPython
 markdown2
+pybars
