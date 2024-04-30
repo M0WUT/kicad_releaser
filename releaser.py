@@ -116,9 +116,9 @@ def generate_webpage(
     boardpage(
         outdir=output_folder.absolute(),
         description=(top_level_folder.parent / "README.md").absolute(),
-        board=[x.stem,
+        board=[(x.stem,
             "It's alive",
-            x.with_suffix(".kicad_pcb").absolute() for x in project_paths],
+            x.with_suffix(".kicad_pcb").absolute()) for x in project_paths],
         resource=[],
         template=(pathlib.Path(__file__).parent / "template").absolute(),
         repository=url,
