@@ -132,9 +132,9 @@ def generate_webpage(
         template.addBoard(name, comment, file)
     template._copyResources(outdir)
     with open(os.path.join(template.directory, "index.html"), encoding="utf-8") as templateFile:
-        template = pybars.Compiler().compile(templateFile.read())
+        markdown_template = pybars.Compiler().compile(templateFile.read())
         gitRev = template.gitRevision()
-        content = template({
+        content = markdown_template({
             "repo": template.repository,
             "gitRev": gitRev,
             "gitRevShort": gitRev[:7] if gitRev else None,
