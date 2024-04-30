@@ -120,7 +120,7 @@ def generate_webpage(
     pathlib.Path(outdir).mkdir(parents=True, exist_ok=True)
     template = readTemplate((pathlib.Path(__file__).parent / "template").absolute())
     template.addDescriptionFile(str((top_level_folder.parent / "README.md").absolute()))
-    template.bom_report =  markdown2.markdown_path(str((top_level_folder.parent / "bom.md").absolute()), extras=["fenced-code-blocks", "tables"])
+    template.bom_report = markdown2.markdown_path(str((output_folder / "bom.md").absolute()), extras=["fenced-code-blocks", "tables"])
     template.setRepository(url)
     template.setName(top_level_folder.absolute().stem)
     for r in resources:
@@ -130,7 +130,21 @@ def generate_webpage(
         x.with_suffix(".kicad_pcb").absolute()) for x in project_paths]:
         template.addBoard(name, comment, file)
     template._copyResources(outdir)
-    template._renderPage(outdir)
+    with open(os.path.join(template.directory, "index.html"), encoding="utf-8") as templateFile:
+        template = pybars.Compiler().compile(templateFile.read())
+        gitRev = template.gitRevision()
+        content = template({
+            "repo": template.repository,
+            "gitRev": gitRev,
+            "gitRevShort": gitRev[:7] if gitRev else None,
+            "datetime": template.currentDateTime(),
+            "name": template.name,
+            "boards": template.boards,
+            "description": template.description,
+            "bom_report": template.bom_report
+        })
+        with open(os.path.join(outdir, "index.html"),"w", encoding="utf-8") as outFile:
+            outFile.write(content)
  
 
 def create_kicad_source(
