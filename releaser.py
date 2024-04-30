@@ -3,7 +3,7 @@ import pathlib
 import subprocess
 import sys
 import typing
-from kikit.present import boardpage
+from kikit.present import boardpage, readTemplate
 
 import git
 import pypdf
@@ -114,11 +114,9 @@ def generate_webpage(
         url = url[:-4]
 
     boardpage(
-        outdir=output_folder.absolute(),
+        
         description=str((top_level_folder.parent / "README.md").absolute()),
-        board=[(x.stem,
-            "It's alive",
-            x.with_suffix(".kicad_pcb").absolute()) for x in project_paths],
+        board=,
         resource=[],
         template=(pathlib.Path(__file__).parent / "template").absolute(),
         repository=url,
@@ -126,6 +124,22 @@ def generate_webpage(
         
         
     )
+    outdir=output_folder.absolute(),
+    resources = []
+
+    pathlib.Path(outdir).mkdir(parents=True, exist_ok=True)
+    template = readTemplate(template)
+    template.addDescriptionFile(str((top_level_folder.parent / "README.md").absolute()))
+    template.setRepository(url)
+    template.setName(name)
+    for r in resources:
+        template.addResource(r)
+    for name, comment, file in [(x.stem,
+        "It's alive",
+        x.with_suffix(".kicad_pcb").absolute()) for x in project_paths]:
+        template.addBoard(name, comment, file)
+    template._copyResources(outdir)
+    template._renderPage(outdir)
  
 
 def create_kicad_source(
