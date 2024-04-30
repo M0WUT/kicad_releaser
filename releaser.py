@@ -4,6 +4,7 @@ import subprocess
 import sys
 import typing
 import markdown2
+import pybars
 from kikit.present import readTemplate
 
 import git
