@@ -208,7 +208,7 @@ def main(top_level_folder: pathlib.Path, release_folder: pathlib.Path):
     )
     project_paths = discover_kicad_projects(top_level_folder)
     for x in project_paths:
-        generate_schematic_pdf(x, release_folder)f
+        generate_schematic_pdf(x, release_folder)
         create_kicad_source(x, release_folder)
         generate_board_images(x, release_folder)
         # create_step_file(x, release_folder)
