@@ -3,6 +3,7 @@ import pathlib
 import subprocess
 import sys
 import typing
+from kikit.present import boardpage
 
 import git
 import pypdf
@@ -112,45 +113,20 @@ def generate_webpage(
     if url.endswith(".git"):
         url = url[:-4]
 
-    # commands = [
-    #     "pcbdraw",
-    #     "plot",
-    #     "--vcuts=Cmts.User",
-    #     "--side=front",
-    #     project_paths[0].with_suffix(".kicad_pcb").absolute(),
-    #     "./test.png"
-
-    # ]
-    # run_command(commands)
-
-    commands = [
-        "kikit",
-        "present",
-        "boardpage",
-        "-d",
-        (top_level_folder.parent / "README.md").absolute(),
-        "--name",
-        top_level_folder.absolute().stem,
-    ]
-    for x in project_paths:
-        commands += [
-            "-b",
-            x.stem,
+    boardpage(
+        outdir=output_folder.absolute(),
+        description=(top_level_folder.parent / "README.md").absolute(),
+        board=[x.stem,
             "It's alive",
-            x.with_suffix(".kicad_pcb").absolute(),
-        ]
-
-    commands += [
-        "--template",
-        (pathlib.Path(__file__).parent / "template").absolute(),
-        "--repository",
-        url,
-        output_folder.absolute(),
-    ]
-    
-
-    run_command(commands)
-
+            x.with_suffix(".kicad_pcb").absolute() for x in project_paths],
+        resource=[],
+        template=(pathlib.Path(__file__).parent / "template").absolute(),
+        repository=url,
+        name=top_level_folder.absolute().stem,
+        
+        
+    )
+ 
 
 def create_kicad_source(
     kicad_project: pathlib.Path, output_folder: pathlib.Path
