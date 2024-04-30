@@ -3,6 +3,7 @@ import pathlib
 import subprocess
 import sys
 import typing
+import markdown2
 from kikit.present import boardpage, readTemplate
 
 import git
@@ -119,6 +120,7 @@ def generate_webpage(
     pathlib.Path(outdir).mkdir(parents=True, exist_ok=True)
     template = readTemplate((pathlib.Path(__file__).parent / "template").absolute())
     template.addDescriptionFile(str((top_level_folder.parent / "README.md").absolute()))
+    template.bom_report =  markdown2.markdown_path(str((top_level_folder.parent / "bom.md").absolute()), extras=["fenced-code-blocks", "tables"])
     template.setRepository(url)
     template.setName(top_level_folder.absolute().stem)
     for r in resources:
@@ -206,10 +208,10 @@ def main(top_level_folder: pathlib.Path, release_folder: pathlib.Path):
     )
     project_paths = discover_kicad_projects(top_level_folder)
     for x in project_paths:
-        # generate_schematic_pdf(x, release_folder)
-        # create_kicad_source(x, release_folder)
+        generate_schematic_pdf(x, release_folder)f
+        create_kicad_source(x, release_folder)
         generate_board_images(x, release_folder)
-        # create_step_file(x, release_folder)
+        create_step_file(x, release_folder)
         create_ibom(x, release_folder)
     generate_webpage(
         top_level_folder,

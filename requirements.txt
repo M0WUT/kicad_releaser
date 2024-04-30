@@ -2,3 +2,4 @@ lxml==4.9.3
 mistune==2.0.5
 pypdf
 GitPython
+markdown2
