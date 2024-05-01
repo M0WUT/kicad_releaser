@@ -95,7 +95,7 @@ class Mousearch:
                 num_parts_from_farnell = 0
                 num_unavailable_parts = 0
                 # Order from first supplier that has stock
-                quantity = status["quantity"]
+                quantity = status["quantityNeeded"]
                 if status["stockedAtMouser"]:
                     mouser_csv.write(f"{mpn},{quantity}\n")
                     num_parts_from_mouser += 1
