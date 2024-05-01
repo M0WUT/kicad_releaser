@@ -56,7 +56,7 @@ class Mousearch:
         found_parts = {}
 
         with open(self.bom) as bom_file:
-            for line in tqdm(bom_file.readlines()[1:]):
+            for line in tqdm(bom_file.readlines()[1:3]):
                 mpn, quantity = line.split('","')
                 mpn = re.sub('"', "", mpn)
                 quantity = int(re.sub('"', "", quantity))
