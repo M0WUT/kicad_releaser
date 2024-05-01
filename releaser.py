@@ -33,7 +33,7 @@ def discover_kicad_projects(
     return results
 
 
-def generate_schematic_pdf(kicad_project: pathlib.Path, output_folder: pathlib.Path):
+def create_schematic_pdf(kicad_project: pathlib.Path, output_folder: pathlib.Path):
     temp_schematic_path = pathlib.Path(__file__).parent / "temp_schematic.pdf"
     run_command(
         [
@@ -79,7 +79,7 @@ def generate_schematic_pdf(kicad_project: pathlib.Path, output_folder: pathlib.P
     writer.write(output_folder / f"{kicad_project.stem}.pdf")
 
 
-def generate_board_images(kicad_project: pathlib.Path, output_folder: pathlib.Path):
+def create_board_images(kicad_project: pathlib.Path, output_folder: pathlib.Path):
     for side in ["front", "back"]:
         run_command(
             [
@@ -97,7 +97,7 @@ def generate_board_images(kicad_project: pathlib.Path, output_folder: pathlib.Pa
         )
 
 
-def generate_webpage(
+def create_webpage(
     top_level_folder: pathlib.Path,
     output_folder: pathlib.Path,
     board_list: list[Tuple[str, str, str]],
@@ -302,10 +302,11 @@ def main(
 
     boards = []
     for x in project_paths:
-        generate_schematic_pdf(x, release_folder)
+        create_schematic_pdf(x, release_folder)
         create_kicad_source(x, release_folder)
-        generate_board_images(x, release_folder)
+        create_board_images(x, release_folder)
         # create_step_file(x, release_folder)
+        create_gerbers(x, release_folder)
         create_ibom(x, release_folder)
         if bom_checker:
             bom_checker.run(
@@ -328,7 +329,7 @@ def main(
             )
         )
 
-    generate_webpage(
+    create_webpage(
         top_level_folder=top_level_folder,
         output_folder=release_folder,
         board_list=boards,
