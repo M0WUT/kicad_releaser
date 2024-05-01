@@ -125,6 +125,7 @@ def generate_webpage(
         template.addResource(r)
     for name, comment, file in board_list:
         template.addBoard(name, comment, file)
+        print(comment)
     
     template._copyResources(output_folder)
     # self._renderBoards(outputDirectory)  # BROKEN LINE
