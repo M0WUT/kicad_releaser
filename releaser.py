@@ -221,7 +221,7 @@ def create_gerbers(kicad_project: pathlib.Path, output_folder: pathlib.Path):
         )
 
         # Remove unnecessary files
-        banned_suffixes = ["gta", "gba", "gbr"]
+        banned_suffixes = ["gta", "gba", "gbr", "gbrjob"]
         for x in tmp_folder.glob("*"):
             if x.name.split(".")[-1] in banned_suffixes:
                 x.unlink()
@@ -230,16 +230,17 @@ def create_gerbers(kicad_project: pathlib.Path, output_folder: pathlib.Path):
         commands = [
             "zip",
             str((output_folder / f"{kicad_project.stem}-gerbers.zip").absolute()),
-            str((tmp_folder / "*").absolute())
         ]
+        commands += [x for x in (tmp_folder.parent).glob("*")]
+
         run_command(commands)
 
     finally:
         pass
         # Erase tmp folder
-        # for x in tmp_folder.glob("*"):
-        #     x.unlink()
-        # tmp_folder.rmdir()
+        for x in tmp_folder.glob("*"):
+            x.unlink()
+        tmp_folder.rmdir()
 
 
 
