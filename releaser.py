@@ -213,9 +213,9 @@ def create_gerbers(kicad_project: pathlib.Path, output_folder: pathlib.Path):
                 "pcb",
                 "export",
                 "gerbers",
-                "--no-netlist"
+                "--no-netlist",
                 "-o",
-                tmp_folder,
+                str(tmp_folder.absolute()) + "/",  # This is awful but crashes unless ends with "/"
                 kicad_project.with_suffix(".kicad_pcb").absolute(),
             ]
         )
