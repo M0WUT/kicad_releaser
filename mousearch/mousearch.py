@@ -107,7 +107,7 @@ class Mousearch:
 
                 # Highlight potential issues for any part that is not
                 # in stock by every supplier
-                if score < (MOUSER_BIT | FARNELL_BIT):
+                if status["score"] < (MOUSER_BIT | FARNELL_BIT):
                     if issues_found_str == "":
                         # Put header in
                         issues_found_str = "### Issues\rPossible supply issues were found with the following items:\r\r"
@@ -115,12 +115,12 @@ class Mousearch:
                         issues_found_str += "| --- | --- | --- |\r"
 
                     issues_found_str += f"| {mpn} "
-                    if score & MOUSER_BIT:
+                    if status["stocketAtMouser"]:
                         issues_found_str += "| ✅ "
                     else:
                         issues_found_str += "| ❌ "
 
-                    if score & FARNELL_BIT:
+                    if status["stockedAtFarnell"]:
                         issues_found_str += "| ✅ "
                     else:
                         issues_found_str += "| ❌ "
