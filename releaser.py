@@ -124,7 +124,7 @@ def generate_webpage(
     for r in resources:
         template.addResource(r)
     for name, comment, file in board_list:
-        template.addBoard(name, comment.encode(), file)
+        template.addBoard(name, comment, file)
     
     template._copyResources(output_folder)
     # self._renderBoards(outputDirectory)  # BROKEN LINE
@@ -134,7 +134,6 @@ def generate_webpage(
     with open(os.path.join(template.directory, "index.html"), encoding="utf-8") as templateFile:
         html_template = pybars.Compiler().compile(templateFile.read())
         gitRev = template.gitRevision()
-        print(template.boards)
         content = html_template({
             "repo": template.repository,
             "gitRev": gitRev,
@@ -252,7 +251,6 @@ def main(
                 x.with_suffix(".kicad_pcb").absolute(),
             )
         )
-        print(comment)
 
     generate_webpage(
         top_level_folder=top_level_folder,      
