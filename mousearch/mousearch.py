@@ -110,7 +110,7 @@ class Mousearch:
                 if score < (MOUSER_BIT | FARNELL_BIT):
                     if issues_found_str == "":
                         # Put header in
-                        issues_found_str = "## Issues\rPossible supply issues were found with the following items:\r\r"
+                        issues_found_str = "### Issues\rPossible supply issues were found with the following items:\r\r"
                         issues_found_str += "| MPN | Mouser | Farnell |\r"
                         issues_found_str += "| --- | --- | --- |\r"
 
@@ -129,7 +129,7 @@ class Mousearch:
 
             # Have finished going through parts
             if issues_found_str == "":
-                issues_found_str = "## Issues\rNo supply issues found\r"
+                issues_found_str = "### Issues\rNo supply issues found\r"
 
             sourcing_table = f"### Supply breakdown\r"
             sourcing_table += "| Source | Mouser | Farnell | Unavailable |\r"

@@ -241,9 +241,9 @@ def main(
         create_ibom(x, release_folder)
         if bom_checker:
             bom_checker.run(
-                x.with_suffix(".kicad_sch").absolute(), pathlib.Path(f"{x.stem}-bom.md"),
-                mouser_basket=pathlib.Path(f"{x.stem}-mouser-bom.csv"),
-                farnell_basket=pathlib.Path(f"{x.stem}-farnell-bom.csv"),
+                x.with_suffix(".kicad_sch").absolute(), pathlib.Path(release_folder / f"{x.stem}-bom.md"),
+                mouser_basket=pathlib.Path(release_folder / f"{x.stem}-mouser-bom.csv"),
+                farnell_basket=pathlib.Path(release_folder / f"{x.stem}-farnell-bom.csv"),
             )
             comment = markdown2.markdown_path(
                 pathlib.Path(f"{x.stem}-bom.md").absolute(),
