@@ -10,9 +10,9 @@ import sys
 import os
 import subprocess
 
-from common import ErrorDialog, InfoDialog, WarningDialog
-from mouser_api import MouserAPI
-from farnell_api import FarnellAPI
+
+from mousearch.mouser_api import MouserAPI
+from mousearch.farnell_api import FarnellAPI
 
 MOUSER_BIT = 1 << 1
 FARNELL_BIT = 1 << 0
