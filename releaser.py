@@ -114,8 +114,8 @@ def generate_webpage(
 
     resources = []
 
-    # Have to create page this way rather than using kikit.boardpage to prevent template._renderBoards being called as it's very broken
-    # and the outputs are not used 
+    # Below is an expansion of kikit.boardpage with the broken command (which calls pcbdraw)
+    # commented out as pcbdraw does not currently work and the output isn't used anyway
     output_folder.mkdir(parents=True, exist_ok=True)
     template = readTemplate((pathlib.Path(__file__).parent / "template").absolute())
     template.addDescriptionFile(str((top_level_folder.parent / "README.md").absolute()))
@@ -125,7 +125,10 @@ def generate_webpage(
         template.addResource(r)
     for name, comment, file in board_list:
         template.addBoard(name, comment, file)
-    template.render(output_folder)
+    
+    template._copyResources(output_folder)
+    # self._renderBoards(outputDirectory)  # BROKEN LINE
+    template._renderPage(output_folder)
 
 
 def create_kicad_source(kicad_project: pathlib.Path, output_folder: pathlib.Path):
