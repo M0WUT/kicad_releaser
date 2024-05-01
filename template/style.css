@@ -360,8 +360,8 @@ h3 {
 
 h1 {
     font-size: 2em;
-    margin: .67em 0;
-    background-color: #e1970c;
+    margin:0;
+    border-bottom: 5px solid #e1970c;
 }
 
 h2 {
@@ -394,6 +394,8 @@ ul {
 .inline-block-child {
     display: inline-block;
     max-width: 45%;
+    text-align: center;
+    margin: 10px;
 }
 
 .parent {
