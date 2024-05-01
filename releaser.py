@@ -246,7 +246,7 @@ def main(
                 farnell_basket=pathlib.Path(release_folder / f"{x.stem}-farnell-bom.csv"),
             )
             comment = markdown2.markdown_path(
-                pathlib.Path(f"{x.stem}-bom.md").absolute(),
+                release_folder / pathlib.Path(f"{x.stem}-bom.md").absolute(),
                 extras=["fenced-code-blocks", "tables"],
             )
         else:
