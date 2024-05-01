@@ -33,10 +33,6 @@ def discover_kicad_projects(
     return results
 
 
-def generate_bom_report(kicad_project: pathlib.Path, output_folder: pathlib.Path):
-    x = Mousearch()
-
-
 def generate_schematic_pdf(kicad_project: pathlib.Path, output_folder: pathlib.Path):
     temp_schematic_path = pathlib.Path(__file__).parent / "temp_schematic.pdf"
     run_command(
@@ -90,10 +86,10 @@ def generate_board_images(kicad_project: pathlib.Path, output_folder: pathlib.Pa
                 "kicad-cli",
                 "pcb",
                 "render",
+                "--quality",
+                "high",
                 "--side",
                 f"{'top' if side == 'front' else 'bottom'}",
-                "--background",
-                "transparent",
                 "-o",
                 (output_folder / f"{kicad_project.stem}-{side}.png").absolute(),
                 kicad_project.with_suffix(".kicad_pcb").absolute(),
@@ -117,10 +113,9 @@ def generate_webpage(
     if repo_name.endswith(".git"):
         repo_name = repo_name[:-4]
     # Replace all underscores and hypens with spaces
-    repo_name = re.sub(r'[_-]', ' ', repo_name)
+    repo_name = re.sub(r"[_-]", " ", repo_name)
     # Capitalise each word
     repo_name = " ".join([x.capitalize() for x in repo_name.split()])
-
 
     resources = []
 
@@ -135,31 +130,37 @@ def generate_webpage(
         template.addResource(r)
     for name, comment, file in board_list:
         template.addBoard(name, comment, file)
-    
+
     template._copyResources(output_folder)
     # self._renderBoards(outputDirectory)  # BROKEN LINE
 
-
     # Render page
-    with open(os.path.join(template.directory, "index.html"), encoding="utf-8") as templateFile:
+    with open(
+        os.path.join(template.directory, "index.html"), encoding="utf-8"
+    ) as templateFile:
         html_template = pybars.Compiler().compile(templateFile.read())
         gitRev = template.gitRevision()
-        content = html_template({
-            "repo": template.repository,
-            "gitRev": gitRev,
-            "gitRevShort": gitRev[:7] if gitRev else None,
-            "datetime": template.currentDateTime(),
-            "name": repo_name,
-            "boards": template.boards,
-            "description": template.description
-        })
+        content = html_template(
+            {
+                "repo": template.repository,
+                "gitRev": gitRev,
+                "gitRevShort": gitRev[:7] if gitRev else None,
+                "datetime": template.currentDateTime(),
+                "name": repo_name,
+                "boards": template.boards,
+                "description": template.description,
+            }
+        )
         # Fix escaping of < and > symbols in pybars
-        content = re.sub('&lt;', '<', content)
-        content = re.sub('&gt;', '>', content)
+        content = re.sub("&lt;", "<", content)
+        content = re.sub("&gt;", ">", content)
 
         # Write out file
-        with open(os.path.join(output_folder, "index.html"),"w", encoding="utf-8") as outFile:
+        with open(
+            os.path.join(output_folder, "index.html"), "w", encoding="utf-8"
+        ) as outFile:
             outFile.write(content)
+
 
 def create_kicad_source(kicad_project: pathlib.Path, output_folder: pathlib.Path):
     commands = [
@@ -185,6 +186,60 @@ def create_step_file(kicad_project: pathlib.Path, output_folder: pathlib.Path):
             (output_folder / f"{kicad_project.stem}.step").absolute(),
         ]
     )
+
+def create_gerbers(kicad_project: pathlib.Path, output_folder: pathlib.Path):
+    try:
+        # Setup temporary folder
+        tmp_folder = pathlib.Path("tmp")
+        tmp_folder.mkdir()
+        # Generate drill files
+        run_command(
+            [
+                "kicad-cli",
+                "pcb",
+                "export",
+                "drill",
+                "--excellon-separate-th"
+                "-o",
+                tmp_folder,
+                kicad_project.with_suffix(".kicad_pcb").absolute(),
+            ]
+        )
+
+        # Generate Gerbers
+        run_command(
+            [
+                "kicad-cli",
+                "pcb",
+                "export",
+                "gerbers",
+                "--no-netlist"
+                "-o",
+                tmp_folder,
+                kicad_project.with_suffix(".kicad_pcb").absolute(),
+            ]
+        )
+
+        # Remove unnecessary files
+        banned_suffixes = ["gta", "gba", "gbr"]
+        for x in tmp_folder.glob("*"):
+            if x.split(".")[-1] in banned_suffixes:
+                x.unlink()
+
+        # Zip it up
+        commands = [
+            "zip",
+            (output_folder / f"{kicad_project.stem}-gerbers.zip").absolute(),
+            tmp_folder
+        ]
+        run_command(commands)
+
+    finally:
+        # Erase tmp folder
+        for x in tmp_folder.glob("*"):
+            x.unlink()
+        tmp_folder.rmdir()
+
 
 
 def create_netlist(kicad_project: pathlib.Path, output_folder: pathlib.Path):
@@ -215,6 +270,10 @@ def create_ibom(kicad_project: pathlib.Path, output_folder: pathlib.Path):
             "JP*,LAYOUT*",
             "--extra-fields",
             "Manufacturer,MPN",
+            "--show-fields",
+            "Manufacturer,MPN,Value",
+            "--group-fields",
+            "MPN",
             "--dest-dir",
             output_folder.absolute(),
             "--name-format",
@@ -250,9 +309,10 @@ def main(
         create_ibom(x, release_folder)
         if bom_checker:
             bom_checker.run(
-                x.with_suffix(".kicad_sch").absolute(), release_folder / f"{x.stem}-bom.md",
+                x.with_suffix(".kicad_sch").absolute(),
+                release_folder / f"{x.stem}-bom.md",
                 mouser_basket=release_folder / f"{x.stem}-mouser-bom.csv",
-                farnell_basket=release_folder / f"{x.stem}-farnell-bom.csv"
+                farnell_basket=release_folder / f"{x.stem}-farnell-bom.csv",
             )
             comment = markdown2.markdown_path(
                 (release_folder / f"{x.stem}-bom.md").absolute(),
@@ -269,10 +329,10 @@ def main(
         )
 
     generate_webpage(
-        top_level_folder=top_level_folder,      
+        top_level_folder=top_level_folder,
         output_folder=release_folder,
         board_list=boards,
-        resources=[]
+        resources=[],
     )
 
 
