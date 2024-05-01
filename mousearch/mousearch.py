@@ -24,6 +24,8 @@ class Mousearch:
     def generate_bom(
         self, top_level_schematic: pathlib.Path, output_file: pathlib.Path = "bom.csv"
     ):
+        output_file.parent.mkdir(parents=True, exist_ok=True)
+        
         commands = [
             "kicad-cli",
             "sch",
