@@ -111,7 +111,6 @@ class Mousearch:
                     if issues_found_str == "":
                         # Put header in
                         issues_found_str = "### Issues\rPossible supply issues were found with the following items:\r\r"
-                        issues_found_str += '<div class="bg-gray">'
                         issues_found_str += "| MPN | Mouser | Farnell |\r"
                         issues_found_str += "| --- | --- | --- |\r"
 
@@ -130,16 +129,12 @@ class Mousearch:
 
             # Have finished going through parts
             if issues_found_str == "":
-                issues_found_str = '### Issues\r<div class="bg-gray">No supply issues found\r'
-
-            issues_found_str += '</div>'
+                issues_found_str = '### Issues\rNo supply issues found\r'
 
             sourcing_table = f"### Supply breakdown\r"
-            sourcing_table += '<div class="bg-gray">'
             sourcing_table += "| Source | Mouser | Farnell | Unavailable |\r"
             sourcing_table += "| --- | --- | --- | --- |\r"
             sourcing_table += f"| Components | {num_parts_from_mouser} | {num_parts_from_farnell} | {num_unavailable_parts} |\r\r\r"
-            sourcing_table += "</div"
             bom_report.write(sourcing_table + issues_found_str)
 
     def run(
