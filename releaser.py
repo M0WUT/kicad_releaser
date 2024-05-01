@@ -208,11 +208,11 @@ def main(
 
     boards = []
     for x in project_paths:
-        generate_schematic_pdf(x, release_folder)
-        create_kicad_source(x, release_folder)
+        # generate_schematic_pdf(x, release_folder)
+        # create_kicad_source(x, release_folder)
         generate_board_images(x, release_folder)
-        create_step_file(x, release_folder)
-        create_ibom(x, release_folder)
+        # create_step_file(x, release_folder)
+        # create_ibom(x, release_folder)
         if bom_checker:
             bom_checker.run(
                 x.with_suffix(".kicad_sch").absolute(), pathlib.Path(f"{x.stem}-bom.md")
