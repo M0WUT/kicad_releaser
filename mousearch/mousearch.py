@@ -75,7 +75,7 @@ class Mousearch:
                     "score": score,
                     "stockedAtMouser": bool(score & MOUSER_BIT),
                     "stockedAtFarnell": bool(score & FARNELL_BIT),
-                    "quantityNeeded": quantity
+                    "quantityNeeded": quantity,
                 }
                 while (datetime.now() - start_time).seconds < 2:
                     sleep(0.1)
@@ -83,17 +83,17 @@ class Mousearch:
         # Print report in sorted order
         with (
             open(output_file, "w") as bom_report,
-            open(mouser_basket, "w") as mouser_csv, 
-            open(farnell_basket, "w") as farnell_csv
+            open(mouser_basket, "w") as mouser_csv,
+            open(farnell_basket, "w") as farnell_csv,
         ):
 
             issues_found_str = ""
+            num_parts_from_mouser = 0
+            num_parts_from_farnell = 0
+            num_unavailable_parts = 0
             for mpn, status in sorted(
                 found_parts.items(), key=lambda item: (item[1]["score"], item[0])
             ):
-                num_parts_from_mouser = 0
-                num_parts_from_farnell = 0
-                num_unavailable_parts = 0
                 # Order from first supplier that has stock
                 quantity = status["quantityNeeded"]
                 if status["stockedAtMouser"]:
@@ -104,51 +104,56 @@ class Mousearch:
                     num_parts_from_farnell += 1
                 else:
                     num_unavailable_parts += 1
-                    
+
                 # Highlight potential issues for any part that is not
                 # in stock by every supplier
                 if score < (MOUSER_BIT | FARNELL_BIT):
                     if issues_found_str == "":
                         # Put header in
-                        issues_found_str = "## BOM issues\rPossible supply issues were found with the following items:\r\r"
-                        issues_found_str += ("| MPN | Mouser | Farnell |\r")
-                        issues_found_str += ("| --- | --- | --- |\r")
+                        issues_found_str = "## Issues\rPossible supply issues were found with the following items:\r\r"
+                        issues_found_str += "| MPN | Mouser | Farnell |\r"
+                        issues_found_str += "| --- | --- | --- |\r"
 
-                    issues_found_str += (f"| {mpn} ")
+                    issues_found_str += f"| {mpn} "
                     if score & MOUSER_BIT:
-                        issues_found_str += ("| ✅ ")
+                        issues_found_str += "| ✅ "
                     else:
-                        issues_found_str += ("| ❌ ")
+                        issues_found_str += "| ❌ "
 
                     if score & FARNELL_BIT:
-                        issues_found_str += ("| ✅ ")
+                        issues_found_str += "| ✅ "
                     else:
-                        issues_found_str += ("| ❌ ")
+                        issues_found_str += "| ❌ "
 
-                    issues_found_str += ("|\r")
+                    issues_found_str += "|\r"
 
             # Have finished going through parts
             if issues_found_str == "":
-                issues_found_str = "## BOM issues\rNo supply issues found\r"
+                issues_found_str = "## Issues\rNo supply issues found\r"
 
-            sourcing_table = f"## Supply breakdown\r"
+            sourcing_table = f"### Supply breakdown\r"
             sourcing_table += "| Source | Mouser | Farnell | Unavailable |\r"
-            sourcing_table += ("| --- | --- | --- | --- |\r")
-            sourcing_table += (f"| Components | {num_parts_from_mouser} | {num_parts_from_farnell} | {num_unavailable_parts} |\r\r\r")
+            sourcing_table += "| --- | --- | --- | --- |\r"
+            sourcing_table += f"| Components | {num_parts_from_mouser} | {num_parts_from_farnell} | {num_unavailable_parts} |\r\r\r"
 
             bom_report.write(sourcing_table + issues_found_str)
-
 
     def run(
         self,
         top_level_schematic: pathlib.Path,
         output_file: pathlib.Path,
+        mouser_basket: pathlib.Path,
+        farnell_basket: pathlib.Path,
         csv_location: pathlib.Path = "bom.csv",
     ):
         self.generate_bom(
             top_level_schematic=top_level_schematic, output_file=csv_location
         )
-        self.query_suppliers(output_file=output_file, mouser_basket=pathlib.Path("mouser.csv"), farnell_basket=pathlib.Path("farnell.csv"))
+        self.query_suppliers(
+            output_file=output_file,
+            mouser_basket=mouser_basket,
+            farnell_basket=farnell_basket,
+        )
 
 
 if __name__ == "__main__":
