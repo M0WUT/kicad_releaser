@@ -223,7 +223,7 @@ def create_gerbers(kicad_project: pathlib.Path, output_folder: pathlib.Path):
         # Remove unnecessary files
         banned_suffixes = ["gta", "gba", "gbr"]
         for x in tmp_folder.glob("*"):
-            if x.split(".")[-1] in banned_suffixes:
+            if x.name.split(".")[-1] in banned_suffixes:
                 x.unlink()
 
         # Zip it up
