@@ -126,7 +126,8 @@ input::placeholder {
 }
 
 table {
-    border-collapse: collapse
+    border-collapse: collapse;
+    border-style: hidden;
 }
 
 tbody td, th {
@@ -135,7 +136,6 @@ tbody td, th {
     text-align: center;
     background-color: #666;
     border: 1px solid #eee;
-    border-style: hidden;
 }
 
 
@@ -388,6 +388,10 @@ ul {
     list-style-position: inside;
     margin-top: .25rem;
     margin-bottom: .25rem
+}
+
+.inline-block-child {
+    display: inline-block
 }
 
 code {

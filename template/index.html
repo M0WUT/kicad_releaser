@@ -23,13 +23,15 @@
 
         {{#each boards}}
             <h1>{{this.name}}</h1> 
-            <div class="w-full">
-                <h3>Front</h3>
-                <img src="front_render.png" class="boardPreview">
-            </div>
-            <div class="w-full">
-                <h3>Back </h3>
-                <img src="back_render.png" class="boardPreview">
+            <div>
+                <div class="inline-block-child">
+                    <h3>Front</h3>
+                    <img src="front_render.png" class="boardPreview">
+                </div>
+                <div class="inline-block-child">
+                    <h3>Back </h3>
+                    <img src="back_render.png" class="boardPreview">
+                </div>
             </div>
             
             <h2>Purchasing</h2>
