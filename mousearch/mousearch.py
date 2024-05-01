@@ -83,8 +83,8 @@ class Mousearch:
         # Print report in sorted order
         with (
             open(output_file, "w") as bom_report,
-            open(mouser_basket, "r") as mouser_csv, 
-            open(farnell_basket, "r") as farnell_csv
+            open(mouser_basket, "w") as mouser_csv, 
+            open(farnell_basket, "w") as farnell_csv
         ):
 
             issues_found_str = ""
