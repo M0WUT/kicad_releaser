@@ -5,7 +5,7 @@ import sys
 from mousearch.mousearch import Mousearch
 import markdown2
 import pybars
-from kikit.present import readTemplate, boardpage
+from kikit.present import readTemplate
 from typing import Optional, Tuple
 
 import git
@@ -114,16 +114,18 @@ def generate_webpage(
 
     resources = []
 
-    # Make entire webpage
-    boardpage(
-        outdir=str(output_folder.absolute()),
-        description=str((top_level_folder.parent / "README.md").absolute()),
-        board=board_list,
-        resource=resources,
-        template=(pathlib.Path(__file__).parent / "template").absolute(),
-        repository=url,
-        name=top_level_folder.absolute().stem,
-    )
+    # Have to create page this way rather than using kikit.boardpage to prevent template._renderBoards being called as it's very broken
+    # and the outputs are not used 
+    output_folder.mkdir(parents=True, exist_ok=True)
+    template = readTemplate((pathlib.Path(__file__).parent / "template").absolute())
+    template.addDescriptionFile(str((top_level_folder.parent / "README.md").absolute()))
+    template.setRepository(url)
+    template.setName(top_level_folder.absolute().stem)
+    for r in resources:
+        template.addResource(r)
+    for name, comment, file in board_list:
+        template.addBoard(name, comment, file)
+    template.render(output_folder)
 
 
 def create_kicad_source(kicad_project: pathlib.Path, output_folder: pathlib.Path):
