@@ -79,22 +79,21 @@ def create_schematic_pdf(kicad_project: pathlib.Path, output_folder: pathlib.Pat
     writer.write(output_folder / f"{kicad_project.stem}.pdf")
 
 
-def create_board_images(kicad_project: pathlib.Path, output_folder: pathlib.Path):
+def create_board_images(
+    kicad_project: pathlib.Path, output_folder: pathlib.Path, full_release: bool = True
+):
     for side in ["front", "back"]:
-        run_command(
-            [
-                "kicad-cli",
-                "pcb",
-                "render",
-                "--quality",
-                "high",
-                "--side",
-                f"{'top' if side == 'front' else 'bottom'}",
-                "-o",
-                (output_folder / f"{kicad_project.stem}-{side}.png").absolute(),
-                kicad_project.with_suffix(".kicad_pcb").absolute(),
-            ],
-        )
+        commands = ["kicad-cli", "pcb", "render"]
+        if full_release:
+            commands += ["--quality", "high"]
+        commands += [
+            "--side",
+            f"{'top' if side == 'front' else 'bottom'}",
+            "-o",
+            (output_folder / f"{kicad_project.stem}-{side}.png").absolute(),
+            kicad_project.with_suffix(".kicad_pcb").absolute(),
+        ]
+        run_command(commands)
 
 
 def create_webpage(
@@ -187,6 +186,7 @@ def create_step_file(kicad_project: pathlib.Path, output_folder: pathlib.Path):
         ]
     )
 
+
 def create_gerbers(kicad_project: pathlib.Path, output_folder: pathlib.Path):
     try:
         # Setup temporary folder
@@ -201,7 +201,8 @@ def create_gerbers(kicad_project: pathlib.Path, output_folder: pathlib.Path):
                 "drill",
                 "--excellon-separate-th",
                 "-o",
-                str(tmp_folder.absolute()) + "/",  # This is awful but crashes unless ends with "/"
+                str(tmp_folder.absolute())
+                + "/",  # This is awful but crashes unless ends with "/"
                 kicad_project.with_suffix(".kicad_pcb").absolute(),
             ]
         )
@@ -215,7 +216,8 @@ def create_gerbers(kicad_project: pathlib.Path, output_folder: pathlib.Path):
                 "gerbers",
                 "--no-netlist",
                 "-o",
-                str(tmp_folder.absolute()) + "/",  # This is awful but crashes unless ends with "/"
+                str(tmp_folder.absolute())
+                + "/",  # This is awful but crashes unless ends with "/"
                 kicad_project.with_suffix(".kicad_pcb").absolute(),
             ]
         )
@@ -241,7 +243,6 @@ def create_gerbers(kicad_project: pathlib.Path, output_folder: pathlib.Path):
         for x in tmp_folder.glob("*"):
             x.unlink()
         tmp_folder.rmdir()
-
 
 
 def create_netlist(kicad_project: pathlib.Path, output_folder: pathlib.Path):
@@ -293,6 +294,7 @@ def main(
     mouser_key: Optional[str] = None,
     farnell_key: Optional[str] = None,
 ):
+    FULL_RELEASE = False
     print(
         f"Releasing projects in {top_level_folder.absolute()} into {release_folder.absolute()}"
     )
@@ -305,17 +307,19 @@ def main(
     boards = []
     for x in project_paths:
         create_gerbers(x, release_folder)
-        create_schematic_pdf(x, release_folder)
-        create_kicad_source(x, release_folder)
-        create_board_images(x, release_folder)
-        # create_step_file(x, release_folder)
-        create_ibom(x, release_folder)
+        if FULL_RELEASE:
+            create_schematic_pdf(x, release_folder)
+            create_kicad_source(x, release_folder)
+            create_board_images(x, release_folder, full_release=FULL_RELEASE)
+            create_step_file(x, release_folder)
+            create_ibom(x, release_folder)
         if bom_checker:
             bom_checker.run(
                 x.with_suffix(".kicad_sch").absolute(),
                 release_folder / f"{x.stem}-bom.md",
                 mouser_basket=release_folder / f"{x.stem}-mouser-bom.csv",
                 farnell_basket=release_folder / f"{x.stem}-farnell-bom.csv",
+                full_release=FULL_RELEASE
             )
             comment = markdown2.markdown_path(
                 (release_folder / f"{x.stem}-bom.md").absolute(),

@@ -48,6 +48,7 @@ class Mousearch:
         output_file: pathlib.Path,
         mouser_basket: pathlib.Path,
         farnell_basket: pathlib.Path,
+        full_release: bool = True
     ):
 
         mouser_api = MouserAPI(self.mouser_key)
@@ -56,7 +57,12 @@ class Mousearch:
         found_parts = {}
 
         with open(self.bom) as bom_file:
-            for line in tqdm(bom_file.readlines()[1:3]):
+            parts_to_check = bom_file.readlines()[1:]
+            if not full_release:
+                # Only check as few parts as this takes ages
+                parts_to_check = parts_to_check[:5]
+
+            for line in tqdm(parts_to_check):
                 mpn, quantity = line.split('","')
                 mpn = re.sub('"', "", mpn)
                 quantity = int(re.sub('"', "", quantity))
@@ -145,6 +151,7 @@ class Mousearch:
         mouser_basket: pathlib.Path,
         farnell_basket: pathlib.Path,
         csv_location: pathlib.Path = "bom.csv",
+        full_release: bool = True
     ):
         self.generate_bom(
             top_level_schematic=top_level_schematic, output_file=csv_location
@@ -153,6 +160,7 @@ class Mousearch:
             output_file=output_file,
             mouser_basket=mouser_basket,
             farnell_basket=farnell_basket,
+            full_release=full_release
         )
 
 
