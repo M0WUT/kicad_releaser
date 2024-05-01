@@ -235,10 +235,11 @@ def create_gerbers(kicad_project: pathlib.Path, output_folder: pathlib.Path):
         run_command(commands)
 
     finally:
+        pass
         # Erase tmp folder
-        for x in tmp_folder.glob("*"):
-            x.unlink()
-        tmp_folder.rmdir()
+        # for x in tmp_folder.glob("*"):
+        #     x.unlink()
+        # tmp_folder.rmdir()
 
 
 
