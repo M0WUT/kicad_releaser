@@ -115,7 +115,7 @@ class Mousearch:
                         issues_found_str += "| --- | --- | --- |\r"
 
                     issues_found_str += f"| {mpn} "
-                    if status["stocketAtMouser"]:
+                    if status["stockedAtMouser"]:
                         issues_found_str += "| ✅ "
                     else:
                         issues_found_str += "| ❌ "
