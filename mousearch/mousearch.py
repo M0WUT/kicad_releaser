@@ -148,7 +148,7 @@ class Mousearch:
         self.generate_bom(
             top_level_schematic=top_level_schematic, output_file=csv_location
         )
-        self.query_suppliers(output_file=output_file)
+        self.query_suppliers(output_file=output_file, mouser_basket=pathlib.Path("mouser.csv"), farnell_basket=pathlib.Path("farnell.csv"))
 
 
 if __name__ == "__main__":
