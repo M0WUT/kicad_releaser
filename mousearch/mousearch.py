@@ -152,7 +152,7 @@ class Mousearch:
         full_release: bool = True
     ):
         if csv_location is None:
-            pathlib.Path() / ".." / f"tmp-{top_level_schematic.stem} //"bom.csv",
+            pathlib.Path() / ".." / f"tmp-{top_level_schematic.stem}" //"bom.csv",
         self.generate_bom(
             top_level_schematic=top_level_schematic, output_file=csv_location
         )
