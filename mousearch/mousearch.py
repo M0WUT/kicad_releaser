@@ -81,7 +81,6 @@ class Mousearch:
                     sleep(0.1)
 
         # Print report in sorted order
-        issues = {}
         with (
             open(output_file, "w") as bom_report,
             open(mouser_basket, "r") as mouser_csv, 
@@ -90,7 +89,7 @@ class Mousearch:
 
             issues_found_str = ""
             for mpn, status in sorted(
-                found_parts.items(), key=lambda item: (item[1][score], item[0])
+                found_parts.items(), key=lambda item: (item[1]["score"], item[0])
             ):
                 num_parts_from_mouser = 0
                 num_parts_from_farnell = 0
