@@ -199,7 +199,7 @@ def create_gerbers(kicad_project: pathlib.Path, output_folder: pathlib.Path):
                 "pcb",
                 "export",
                 "drill",
-                "--excellon-separate-th"
+                "--excellon-separate-th",
                 "-o",
                 tmp_folder,
                 kicad_project.with_suffix(".kicad_pcb").absolute(),
