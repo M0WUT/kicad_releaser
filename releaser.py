@@ -7,6 +7,7 @@ import markdown2
 import pybars
 from kikit.present import readTemplate
 from typing import Optional, Tuple
+import re
 
 import git
 import pypdf
@@ -143,7 +144,11 @@ def generate_webpage(
             "boards": template.boards,
             "description": template.description
         })
-        print(content)
+        # Fix escaping of < and > symbols in pybars
+        re.sub('&lt;', '<', content)
+        re.sub('&gt;', '>', content)
+
+        # Write out file
         with open(os.path.join(output_folder, "index.html"),"w", encoding="utf-8") as outFile:
             outFile.write(content)
 
@@ -231,7 +236,7 @@ def main(
     for x in project_paths:
         # generate_schematic_pdf(x, release_folder)
         # create_kicad_source(x, release_folder)
-        generate_board_images(x, release_folder)
+        #generate_board_images(x, release_folder)
         # create_step_file(x, release_folder)
         # create_ibom(x, release_folder)
         if bom_checker:
