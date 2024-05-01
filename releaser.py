@@ -229,8 +229,8 @@ def create_gerbers(kicad_project: pathlib.Path, output_folder: pathlib.Path):
         # Zip it up
         commands = [
             "zip",
-            (output_folder / f"{kicad_project.stem}-gerbers.zip").absolute(),
-            (tmp_folder / "*").absolute()
+            ((output_folder / f"{kicad_project.stem}-gerbers.zip").absolute()),
+            str((tmp_folder / "*").absolute())
         ]
         run_command(commands)
 
