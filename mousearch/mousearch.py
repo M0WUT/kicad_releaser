@@ -129,12 +129,13 @@ class Mousearch:
 
             # Have finished going through parts
             if issues_found_str == "":
-                issues_found_str = '### Issues\rNo supply issues found\r'
+                issues_found_str = "### Issues\rNo supply issues found\r"
 
             sourcing_table = f"### Supply breakdown\r"
             sourcing_table += "| Source | Mouser | Farnell | Unavailable |\r"
             sourcing_table += "| --- | --- | --- | --- |\r"
             sourcing_table += f"| Components | {num_parts_from_mouser} | {num_parts_from_farnell} | {num_unavailable_parts} |\r\r\r"
+
             bom_report.write(sourcing_table + issues_found_str)
 
     def run(

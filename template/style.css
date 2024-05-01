@@ -133,10 +133,15 @@ tbody td, th {
     padding: 5px;
     overflow-x: hidden;
     text-align: center;
+    background-color: #666;
 }
 
 tbody tr:nth-child(even) {
     background-color: #edf2f7;
+}
+
+th {
+    background-color: #E1970C;
 }
 
 h1,
@@ -350,7 +355,12 @@ h3 {
     word-break: normal;
     color: #eee;
     padding-top: 1.5rem;
-    padding-bottom: .5rem
+    padding-bottom: .5rem 
+}
+
+h1 {
+    font-size: 2em;
+    margin: .67em 0
 }
 
 h2 {
