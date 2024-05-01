@@ -134,6 +134,7 @@ def generate_webpage(
     with open(os.path.join(template.directory, "index.html"), encoding="utf-8") as templateFile:
         html_template = pybars.Compiler().compile(templateFile.read())
         gitRev = template.gitRevision()
+        print(template.boards)
         content = html_template({
             "repo": template.repository,
             "gitRev": gitRev,
