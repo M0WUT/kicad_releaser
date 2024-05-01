@@ -145,8 +145,8 @@ def generate_webpage(
             "description": template.description
         })
         # Fix escaping of < and > symbols in pybars
-        re.sub('&lt;', '<', content)
-        re.sub('&gt;', '>', content)
+        content = re.sub('&lt;', '<', content)
+        content = re.sub('&gt;', '>', content)
 
         # Write out file
         with open(os.path.join(output_folder, "index.html"),"w", encoding="utf-8") as outFile:
