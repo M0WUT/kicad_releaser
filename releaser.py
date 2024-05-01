@@ -232,9 +232,10 @@ def main(
         )
 
     generate_webpage(
-        top_level_folder,
-        project_paths,
-        release_folder,
+        top_level_folder=top_level_folder,      
+        output_folder=release_folder,
+        board_list=boards,
+        resources=[]
     )
 
 
