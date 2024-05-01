@@ -235,6 +235,7 @@ def main(
                 x.with_suffix(".kicad_pcb").absolute(),
             )
         )
+        print(comment)
 
     generate_webpage(
         top_level_folder=top_level_folder,      
