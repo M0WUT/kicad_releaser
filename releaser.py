@@ -229,7 +229,7 @@ def create_gerbers(kicad_project: pathlib.Path, output_folder: pathlib.Path):
         # Zip it up
         commands = [
             "zip",
-            ((output_folder / f"{kicad_project.stem}-gerbers.zip").absolute()),
+            str((output_folder / f"{kicad_project.stem}-gerbers.zip").absolute()),
             str((tmp_folder / "*").absolute())
         ]
         run_command(commands)
@@ -303,11 +303,11 @@ def main(
 
     boards = []
     for x in project_paths:
+        create_gerbers(x, release_folder)
         create_schematic_pdf(x, release_folder)
         create_kicad_source(x, release_folder)
         create_board_images(x, release_folder)
         # create_step_file(x, release_folder)
-        create_gerbers(x, release_folder)
         create_ibom(x, release_folder)
         if bom_checker:
             bom_checker.run(
