@@ -43,7 +43,12 @@ class Mousearch:
         subprocess.check_output(commands)
         self.bom = output_file
 
-    def query_suppliers(self, output_file: pathlib.Path):
+    def query_suppliers(
+        self,
+        output_file: pathlib.Path,
+        mouser_basket: pathlib.Path,
+        farnell_basket: pathlib.Path,
+    ):
 
         mouser_api = MouserAPI(self.mouser_key)
         farnell_api = FarnellAPI(self.farnell_key)
@@ -51,13 +56,13 @@ class Mousearch:
         found_parts = {}
 
         with open(self.bom) as bom_file:
-            for line in tqdm(bom_file.readlines()[1:]):  # @DEBUG
+            for line in tqdm(bom_file.readlines()[1:5]):  # @DEBUG
                 mpn, quantity = line.split('","')
                 mpn = re.sub('"', "", mpn)
                 quantity = int(re.sub('"', "", quantity))
 
                 start_time = datetime.now()
-                score = 0
+                score = 0  # Use score to sort results easily
                 # Check Mouser
                 if mouser_api.check_for_stock(mpn) >= quantity:
                     score += MOUSER_BIT
@@ -66,44 +71,73 @@ class Mousearch:
                 if farnell_api.check_for_stock(mpn) >= quantity:
                     score += FARNELL_BIT
 
-                found_parts[mpn] = score
+                found_parts[mpn] = {
+                    "score": score,
+                    "stockedAtMouser": bool(score & MOUSER_BIT),
+                    "stockedAtFarnell": bool(score & FARNELL_BIT),
+                    "quantityNeeded": quantity
+                }
                 while (datetime.now() - start_time).seconds < 2:
                     sleep(0.1)
 
         # Print report in sorted order
         issues = {}
-        with open(output_file, "w") as file:
-            file.write("| MPN | Mouser | Farnell |\r")
-            file.write("| --- | --- | --- |\r")
-            for mpn, score in sorted(
-                found_parts.items(), key=lambda item: (item[1], item[0])
+        with (
+            open(output_file, "w") as bom_report,
+            open(mouser_basket, "r") as mouser_csv, 
+            open(farnell_basket, "r") as farnell_csv
+        ):
+
+            issues_found_str = ""
+            for mpn, status in sorted(
+                found_parts.items(), key=lambda item: (item[1][score], item[0])
             ):
-
-                file.write(f"| {mpn} ")
-                if score & MOUSER_BIT:
-                    file.write("| ✅ ")
+                num_parts_from_mouser = 0
+                num_parts_from_farnell = 0
+                num_unavailable_parts = 0
+                # Order from first supplier that has stock
+                if status["stockedAtMouser"]:
+                    mouser_csv.write(f"{mpn},{status["quantity"]}\n")
+                    num_parts_from_mouser += 1
+                elif status["stockedAtFarnell"]:
+                    farnell_csv.write(f"{mpn},{status["quantity"]}\n")
+                    num_parts_from_farnell += 1
                 else:
-                    file.write("| ❌ ")
+                    num_unavailable_parts += 1
+                    
+                # Highlight potential issues for any part that is not
+                # in stock by every supplier
+                if score < (MOUSER_BIT | FARNELL_BIT):
+                    if issues_found_str == "":
+                        # Put header in
+                        issues_found_str = "## BOM issues\rPossible supply issues were found with the following items:\r\r"
+                        issues_found_str += ("| MPN | Mouser | Farnell |\r")
+                        issues_found_str += ("| --- | --- | --- |\r")
 
-                if score & FARNELL_BIT:
-                    file.write("| ✅ ")
-                else:
-                    file.write("| ❌ ")
+                    issues_found_str += (f"| {mpn} ")
+                    if score & MOUSER_BIT:
+                        issues_found_str += ("| ✅ ")
+                    else:
+                        issues_found_str += ("| ❌ ")
 
-                file.write("|\r")
+                    if score & FARNELL_BIT:
+                        issues_found_str += ("| ✅ ")
+                    else:
+                        issues_found_str += ("| ❌ ")
 
-                if score == 0:
-                    issues[mpn] = "Not found in Mouser or Farnell"
+                    issues_found_str += ("|\r")
 
-            if issues:
-                warning_string = "Issues found with the following parts:\n"
-                for mpn, issue in issues.items():
-                    warning_string += f"* {mpn}:    {issue}\n"
-                print(warning_string)
-                # WarningDialog(warning_string, "BOM Issues found")
-            else:
-                print("OK")
-                # InfoDialog("No BOM issues found", "Mousearch")
+            # Have finished going through parts
+            if issues_found_str == "":
+                issues_found_str = "## BOM issues\rNo supply issues found\r"
+
+            sourcing_table = f"## Supply breakdown\r"
+            sourcing_table += "| Source | Mouser | Farnell | Unavailable |\r"
+            sourcing_table += ("| --- | --- | --- | --- |\r")
+            sourcing_table += (f"| Components | {num_parts_from_mouser} | {num_parts_from_farnell} | {num_unavailable_parts} |\r\r\r")
+
+            bom_report.write(sourcing_table + issues_found_str)
+
 
     def run(
         self,
