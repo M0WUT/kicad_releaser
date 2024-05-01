@@ -93,7 +93,7 @@ def generate_board_images(kicad_project: pathlib.Path, output_folder: pathlib.Pa
                 "--side",
                 f"{'top' if side == 'front' else 'bottom'}",
                 "--background",
-                "opaque",
+                "transparent",
                 "-o",
                 (output_folder / f"{side}_render.png").absolute(),
                 kicad_project.with_suffix(".kicad_pcb").absolute(),
