@@ -125,13 +125,27 @@ def generate_webpage(
         template.addResource(r)
     for name, comment, file in board_list:
         template.addBoard(name, comment, file)
-    print(template.boards)
     
     template._copyResources(output_folder)
     # self._renderBoards(outputDirectory)  # BROKEN LINE
-    template._renderPage(output_folder)
-    print(template.boards)
 
+
+    # Render page
+    with open(os.path.join(template.directory, "index.html"), encoding="utf-8") as templateFile:
+        html_template = pybars.Compiler().compile(templateFile.read())
+        gitRev = template.gitRevision()
+        content = html_template({
+            "repo": template.repository,
+            "gitRev": gitRev,
+            "gitRevShort": gitRev[:7] if gitRev else None,
+            "datetime": template.currentDateTime(),
+            "name": template.name,
+            "boards": template.boards,
+            "description": template.description
+        })
+        print(content)
+        with open(os.path.join(output_folder, "index.html"),"w", encoding="utf-8") as outFile:
+            outFile.write(content)
 
 def create_kicad_source(kicad_project: pathlib.Path, output_folder: pathlib.Path):
     commands = [
