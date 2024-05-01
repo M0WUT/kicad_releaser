@@ -1,14 +1,12 @@
 import pathlib
 import re
 from datetime import datetime
-from itertools import islice
-from math import ceil
 from time import sleep
 import pathlib
 from tqdm import tqdm
 import sys
-import os
 import subprocess
+from typing import Optional
 
 
 from mousearch.mouser_api import MouserAPI
@@ -150,9 +148,11 @@ class Mousearch:
         output_file: pathlib.Path,
         mouser_basket: pathlib.Path,
         farnell_basket: pathlib.Path,
-        csv_location: pathlib.Path = "bom.csv",
+        csv_location: Optional[pathlib.Path] = None,
         full_release: bool = True
     ):
+        if csv_location is None:
+            pathlib.Path() / ".." / f"tmp-{top_level_schematic.stem} //"bom.csv",
         self.generate_bom(
             top_level_schematic=top_level_schematic, output_file=csv_location
         )

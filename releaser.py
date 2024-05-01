@@ -190,7 +190,7 @@ def create_step_file(kicad_project: pathlib.Path, output_folder: pathlib.Path):
 def create_gerbers(kicad_project: pathlib.Path, output_folder: pathlib.Path):
     try:
         # Setup temporary folder
-        tmp_folder = pathlib.Path("tmp")
+        tmp_folder = pathlib.Path() / ".." / f"gerber-{kicad_project.stem}-tmp"
         tmp_folder.mkdir()
         # Generate drill files
         run_command(
@@ -233,7 +233,7 @@ def create_gerbers(kicad_project: pathlib.Path, output_folder: pathlib.Path):
             "zip",
             str((output_folder / f"{kicad_project.stem}-gerbers.zip").absolute()),
         ]
-        commands += [x for x in (tmp_folder.parent).glob("*")]
+        commands += [x for x in (tmp_folder).glob("*")]
 
         run_command(commands)
 
@@ -306,10 +306,13 @@ def main(
 
     boards = []
     for x in project_paths:
+        # Do this first in case of accidential file creation in the repo
+        create_kicad_source(x, release_folder)
+
         create_gerbers(x, release_folder)
         if FULL_RELEASE:
             create_schematic_pdf(x, release_folder)
-            create_kicad_source(x, release_folder)
+            
             create_board_images(x, release_folder, full_release=FULL_RELEASE)
             create_step_file(x, release_folder)
             create_ibom(x, release_folder)
