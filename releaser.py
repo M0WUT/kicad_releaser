@@ -130,6 +130,7 @@ def generate_webpage(
     template._copyResources(output_folder)
     # self._renderBoards(outputDirectory)  # BROKEN LINE
     template._renderPage(output_folder)
+    print(template.boards)
 
 
 def create_kicad_source(kicad_project: pathlib.Path, output_folder: pathlib.Path):
