@@ -294,7 +294,7 @@ def main(
     mouser_key: Optional[str] = None,
     farnell_key: Optional[str] = None,
 ):
-    FULL_RELEASE = False
+    FULL_RELEASE = True
     print(
         f"Releasing projects in {top_level_folder.absolute()} into {release_folder.absolute()}"
     )
