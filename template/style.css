@@ -134,11 +134,9 @@ tbody td, th {
     overflow-x: hidden;
     text-align: center;
     background-color: #666;
+    border: 1px solid #eee
 }
 
-tbody tr:nth-child(even) {
-    background-color: #edf2f7;
-}
 
 th {
     background-color: #E1970C;
@@ -219,7 +217,8 @@ pre {
 }
 
 .table {
-    display: table
+    display: table;
+    border-style: hidden;
 }
 
 .hidden {
