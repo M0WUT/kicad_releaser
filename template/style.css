@@ -360,7 +360,8 @@ h3 {
 
 h1 {
     font-size: 2em;
-    margin: .67em 0
+    margin: .67em 0;
+    background-color: #e1970c;
 }
 
 h2 {
