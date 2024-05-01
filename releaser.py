@@ -117,7 +117,7 @@ def generate_webpage(
     if repo_name.endswith(".git"):
         repo_name = repo_name[:-4]
     # Replace all underscores and hypens with spaces
-    repo_name = re.sub(r'_-', ' ', repo_name)
+    repo_name = re.sub(r'[_-]', ' ', repo_name)
     # Capitalise each word
     repo_name = " ".join([x.capitalize() for x in repo_name.split()])
 

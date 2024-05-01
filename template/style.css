@@ -134,7 +134,8 @@ tbody td, th {
     overflow-x: hidden;
     text-align: center;
     background-color: #666;
-    border: 1px solid #eee
+    border: 1px solid #eee;
+    border-style: hidden;
 }
 
 
