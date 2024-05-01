@@ -391,8 +391,15 @@ ul {
 }
 
 .inline-block-child {
-    display: inline-block
+    display: inline-block;
+    max-width: 45%;
 }
+
+.parent {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 
 code {
     padding: .25rem
