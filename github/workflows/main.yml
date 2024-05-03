@@ -3,68 +3,51 @@ on:
   push:
     branches: [ main ]
 jobs:
-  build-artifacts:
+  artifacts:
     runs-on: ubuntu-latest
-    image: kicad:nightly-202404
+    container:
+      image: kicad/kicad:nightly-202404
+      options: --user root
     steps:
-      # - name: Install Kicad
-      #   run: |
-      #     sudo add-apt-repository --yes ppa:kicad/kicad-7.0-releases
-      #     sudo apt update
-      #     sudo apt install kicad
-      # - name: Install 3rd party programs
-      #   run: sudo apt install make cmark xsltproc librsvg2-bin xdotool
-      - name: Checkout project repo
-        uses: actions/checkout@v4
-        with:
-          path: main
-
-      - name: Checkout M0WUT Libraries
-        uses: actions/checkout@v4
-        with:
-          repository: "M0WUT/kicad_libraries"
-          path: wut-libraries
-
-      - name: Checkout Interactive HTML BoM
-        uses: actions/checkout@v4
-        with:
-          repository: "openscopeproject/InteractiveHtmlBom"
-          path: ibom
-
-      - name: Checkout M0WUT Kicad Releaser
-        uses: actions/checkout@v4
-        with:
-          repository: "M0WUT/kicad_releaser"
-          path: kicad_releaser
-
-      - name: Install Python dependencies
-        run: pip install -r kicad_releaser/requirements.txt
-
-      - name: Print Dependency versions
-        run: pip freeze
-
-      - run: mkdir -p ~/.config/kicad/7.0
-      - run: cp -r kicad_releaser/kicad_settings/* ~/.config/kicad/7.0
-      - run: sed -i "s#PATH_TO_WUT_LIBRARIES#$(readlink -f wut-libraries)#" ~/.config/kicad/7.0/kicad_common.json
-      - run: cat ~/.config/kicad/7.0/kicad_common.json
-      - run: mkdir build
-
-      # - name: Generate Webpage
-      #   uses: coactions/setup-xvfb@v1
-      #   with:
-      #     run: python ../kicad_releaser/releaser.py . ../build
-      #     working-directory: main
+      - name: Everything
+        run: |
           
-      # - name: Upload Pages artifact
-      #   uses: actions/upload-pages-artifact@v2
-      #   with:
-      #     path: build/
+          apt update
+          apt install -y python3-pip protobuf-compiler xvfb tree
+          HOME=/home/kicad/
+          cd
+
+          git clone --depth 1 ${{ github.server_url }}/${{ github.repository }} checkout
+          git clone --depth 1 https://github.com/M0WUT/kicad_libraries.git wut-libraries
+          git clone --depth 1 https://github.com/openscopeproject/InteractiveHtmlBom.git ibom
+          git clone --depth 1 https://github.com/M0WUT/kicad_releaser.git kicad_releaser
+          # git clone --depth 1 https://gitlab.com/kicad/libraries/kicad-packages3D.git /usr/share/kicad/3dmodels
+          pip install --break-system-packages -r kicad_releaser/requirements.txt
+          pip install --break-system-packages git+https://github.com/yaqwsx/kikit
+
+          mkdir build
+          chmod 777 build
+
+          kicad-cli version
+          rm -r .config/kicad/8.99/*
+          cp -r kicad_releaser/kicad_settings/* .config/kicad/8.99
+          sed -i "s#PATH_TO_WUT_LIBRARIES#$(readlink -f wut-libraries)#" .config/kicad/8.99/kicad_common.json
+
+          cd checkout
+          Xvfb :1 &
+          export DISPLAY=:1
+          python3 ../kicad_releaser/releaser.py . ../build ${{secrets.MOUSER_API_KEY}} ${{secrets.FARNELL_API_KEY}}
+          tree ../build
+          
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: /home/kicad/build/
 
   # Deploy job
   deploy:
     # Add a dependency to the build job
-    needs: build-artifacts
-
+    needs: artifacts
     # Grant GITHUB_TOKEN the permissions required to make a Pages deployment
     permissions:
       pages: write      # to deploy to Pages
@@ -75,12 +58,14 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
 
+
     # Specify runner + deployment step
     runs-on: ubuntu-latest
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v2 
+        uses: actions/deploy-pages@v4
+
       - name: Webpage URL
         run: echo ${{ steps.deployment.outputs.page_url }}
 
