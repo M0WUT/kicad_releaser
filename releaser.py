@@ -11,6 +11,7 @@ import re
 
 import git
 import pypdf
+from zipfile import ZipFile
 
 
 def run_command(commands: list[str | pathlib.Path]):
@@ -162,14 +163,10 @@ def create_webpage(
 
 
 def create_kicad_source(kicad_project: pathlib.Path, output_folder: pathlib.Path):
-    commands = [
-        "zip",
-        (output_folder / f"{kicad_project.stem}.zip").absolute(),
-    ]
-
-    commands += [x for x in (kicad_project.parent).glob("*") if ".git" not in str(x)]
-
-    run_command(commands)
+        with ZipFile(output_folder / "{kicad_project.stem}.zip", 'w') as zip_file:
+             for x in (kicad_project.parent).glob("*"):
+                if ".git" not in str(x):
+                    zip_file.write(x, x.name)
 
 
 def create_step_file(kicad_project: pathlib.Path, output_folder: pathlib.Path):
@@ -228,14 +225,11 @@ def create_gerbers(kicad_project: pathlib.Path, output_folder: pathlib.Path):
             if x.name.split(".")[-1] in banned_suffixes:
                 x.unlink()
 
-        # Zip it up
-        commands = [
-            "zip",
-            str((output_folder / f"{kicad_project.stem}-gerbers.zip").absolute()),
-        ]
-        commands += [x for x in (tmp_folder).glob("*")]
+        # Zip it
+        with ZipFile(output_folder / f"{kicad_project.stem}-gerbers.zip", 'w') as zip_file:
+            for x in tmp_folder.glob("*"):
+                zip_file.write(x, x.name)
 
-        run_command(commands)
 
     finally:
         pass
@@ -294,7 +288,7 @@ def main(
     mouser_key: Optional[str] = None,
     farnell_key: Optional[str] = None,
 ):
-    FULL_RELEASE = True
+    FULL_RELEASE = False
     print(
         f"Releasing projects in {top_level_folder.absolute()} into {release_folder.absolute()}"
     )
