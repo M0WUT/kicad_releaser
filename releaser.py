@@ -163,7 +163,7 @@ def create_webpage(
 
 
 def create_kicad_source(kicad_project: pathlib.Path, output_folder: pathlib.Path):
-        with ZipFile(output_folder / "{kicad_project.stem}.zip", 'w') as zip_file:
+        with ZipFile(output_folder / f"{kicad_project.stem}.zip", 'w') as zip_file:
              for x in (kicad_project.parent).glob("*"):
                 if ".git" not in str(x):
                     zip_file.write(x, x.name)
@@ -288,7 +288,7 @@ def main(
     mouser_key: Optional[str] = None,
     farnell_key: Optional[str] = None,
 ):
-    FULL_RELEASE = False
+    FULL_RELEASE = True
     print(
         f"Releasing projects in {top_level_folder.absolute()} into {release_folder.absolute()}"
     )
