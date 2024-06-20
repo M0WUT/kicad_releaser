@@ -1,17 +1,18 @@
 import os
 import pathlib
+import re
 import subprocess
 import sys
-from mousearch.mousearch import Mousearch
-import markdown2
-import pybars
-from kikit.present import readTemplate
 from typing import Optional, Tuple
-import re
+from zipfile import ZipFile
 
 import git
+import markdown2
+import pybars
 import pypdf
-from zipfile import ZipFile
+from kikit.present import readTemplate
+
+from mousearch.mousearch import Mousearch
 
 
 def run_command(commands: list[str | pathlib.Path]):
@@ -34,7 +35,9 @@ def discover_kicad_projects(
     return results
 
 
-def create_schematic_pdf(kicad_project: pathlib.Path, output_folder: pathlib.Path):
+def create_schematic_pdf(
+    kicad_project: pathlib.Path, output_folder: pathlib.Path
+):
     temp_schematic_path = pathlib.Path(__file__).parent / "temp_schematic.pdf"
     run_command(
         [
@@ -58,11 +61,15 @@ def create_schematic_pdf(kicad_project: pathlib.Path, output_folder: pathlib.Pat
     if "RELEASE:" not in last_commit.message:
         # Load watermark pdfs
         watermark_a3 = pypdf.PdfReader(
-            (pathlib.Path(__file__).parent / "draft_watermark_a3.pdf").absolute()
+            (
+                pathlib.Path(__file__).parent / "draft_watermark_a3.pdf"
+            ).absolute()
         ).pages[0]
 
         watermark_a4 = pypdf.PdfReader(
-            (pathlib.Path(__file__).parent / "draft_watermark_a4.pdf").absolute()
+            (
+                pathlib.Path(__file__).parent / "draft_watermark_a4.pdf"
+            ).absolute()
         ).pages[0]
 
         for page in writer.pages:
@@ -81,7 +88,9 @@ def create_schematic_pdf(kicad_project: pathlib.Path, output_folder: pathlib.Pat
 
 
 def create_board_images(
-    kicad_project: pathlib.Path, output_folder: pathlib.Path, full_release: bool = True
+    kicad_project: pathlib.Path,
+    output_folder: pathlib.Path,
+    full_release: bool = True,
 ):
     for side in ["front", "back"]:
         commands = ["kicad-cli", "pcb", "render"]
@@ -122,8 +131,12 @@ def create_webpage(
     # Below is an expansion of kikit.boardpage with the broken command (which calls pcbdraw)
     # commented out as pcbdraw does not currently work and the output isn't used anyway
     output_folder.mkdir(parents=True, exist_ok=True)
-    template = readTemplate((pathlib.Path(__file__).parent / "template").absolute())
-    template.addDescriptionFile(str((top_level_folder.parent / "README.md").absolute()))
+    template = readTemplate(
+        (pathlib.Path(__file__).parent / "template").absolute()
+    )
+    template.addDescriptionFile(
+        str((top_level_folder.parent / "README.md").absolute())
+    )
     template.setRepository(url)
     template.setName(top_level_folder.absolute().stem)
     for r in resources:
@@ -162,11 +175,13 @@ def create_webpage(
             outFile.write(content)
 
 
-def create_kicad_source(kicad_project: pathlib.Path, output_folder: pathlib.Path):
-        with ZipFile(output_folder / f"{kicad_project.stem}.zip", 'w') as zip_file:
-             for x in (kicad_project.parent).glob("*"):
-                if ".git" not in str(x):
-                    zip_file.write(x, x.name)
+def create_kicad_source(
+    kicad_project: pathlib.Path, output_folder: pathlib.Path
+):
+    with ZipFile(output_folder / f"{kicad_project.stem}.zip", "w") as zip_file:
+        for x in (kicad_project.parent).glob("*"):
+            if ".git" not in str(x):
+                zip_file.write(x, x.name)
 
 
 def create_step_file(kicad_project: pathlib.Path, output_folder: pathlib.Path):
@@ -226,10 +241,11 @@ def create_gerbers(kicad_project: pathlib.Path, output_folder: pathlib.Path):
                 x.unlink()
 
         # Zip it
-        with ZipFile(output_folder / f"{kicad_project.stem}-gerbers.zip", 'w') as zip_file:
+        with ZipFile(
+            output_folder / f"{kicad_project.stem}-gerbers.zip", "w"
+        ) as zip_file:
             for x in tmp_folder.glob("*"):
                 zip_file.write(x, x.name)
-
 
     finally:
         pass
@@ -273,6 +289,8 @@ def create_ibom(kicad_project: pathlib.Path, output_folder: pathlib.Path):
             "MPN",
             "--dest-dir",
             output_folder.absolute(),
+            "--dnp-field",
+            "kicad_dnp",
             "--name-format",
             kicad_project.stem,
             "--netlist-file",
@@ -306,7 +324,7 @@ def main(
         create_gerbers(x, release_folder)
         if FULL_RELEASE:
             create_schematic_pdf(x, release_folder)
-            
+
             create_board_images(x, release_folder, full_release=FULL_RELEASE)
             create_step_file(x, release_folder)
             create_ibom(x, release_folder)
@@ -316,7 +334,7 @@ def main(
                 release_folder / f"{x.stem}-bom.md",
                 mouser_basket=release_folder / f"{x.stem}-mouser-bom.csv",
                 farnell_basket=release_folder / f"{x.stem}-farnell-bom.csv",
-                full_release=FULL_RELEASE
+                full_release=FULL_RELEASE,
             )
             comment = markdown2.markdown_path(
                 (release_folder / f"{x.stem}-bom.md").absolute(),
