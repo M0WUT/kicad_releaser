@@ -13,7 +13,8 @@ jobs:
         run: |
           
           apt update
-          apt install -y python3-pip protobuf-compiler xvfb tree
+          apt install -y python3-pip protobuf-compiler xvfb tree fontconfig ttf-mscorefonts-installer
+          fc-cache -fv
           HOME=/home/kicad/
           cd
 
