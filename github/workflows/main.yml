@@ -6,7 +6,7 @@ jobs:
   artifacts:
     runs-on: ubuntu-latest
     container:
-      image: kicad/kicad:nightly-202404
+      image: kicad/kicad:10.0-full
       options: --user root
     steps:
       - name: Everything
@@ -28,16 +28,16 @@ jobs:
           mkdir build
           chmod 777 build
 
-          kicad-cli version
-          rm -r .config/kicad/8.99/*
-          cp -r kicad_releaser/kicad_settings/* .config/kicad/8.99
-          sed -i "s#PATH_TO_WUT_LIBRARIES#$(readlink -f wut-libraries)#" .config/kicad/8.99/kicad_common.json
+          # kicad-cli version
+          # rm -r .config/kicad/8.99/*
+          # cp -r kicad_releaser/kicad_settings/* .config/kicad/8.99
+          # sed -i "s#PATH_TO_WUT_LIBRARIES#$(readlink -f wut-libraries)#" .config/kicad/8.99/kicad_common.json
 
           cd checkout
           Xvfb :1 &
           export DISPLAY=:1
           python3 ../kicad_releaser/releaser.py . ../build ${{secrets.MOUSER_API_KEY}} ${{secrets.FARNELL_API_KEY}}
-          tree ../build
+          # tree ../build
           
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
