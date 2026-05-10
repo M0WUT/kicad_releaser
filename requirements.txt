@@ -1,5 +1,5 @@
-lxml==4.9.3
-mistune==2.0.5
+lxml
+mistune
 pypdf
 GitPython
 markdown2>=2.4
