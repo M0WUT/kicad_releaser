@@ -11,10 +11,8 @@ jobs:
     steps:
       - name: Everything
         run: |
-          add-apt-repository multiverse
           apt update
-          apt install -y python3-pip protobuf-compiler xvfb tree fontconfig ttf-mscorefonts-installer
-          fc-cache -fv
+          apt install -y python3-pip protobuf-compiler xvfb tree
           HOME=/home/kicad/
           cd
 
