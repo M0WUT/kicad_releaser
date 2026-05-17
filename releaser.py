@@ -471,12 +471,12 @@ class KicadArtefactsGenerator:
 if __name__ == "__main__":
 
     # @DEBUG
-    # top_level_folder = Path(sys.argv[1])
-    # release_folder = Path(sys.argv[2])
-
-    top_level_folder = Path("..") / "p0001-001_test-board"
-    release_folder = Path("temp")
-    wut_library_folder = Path("..") / "wut-libraries"
+    top_level_folder = Path(sys.argv[1])
+    release_folder = Path(sys.argv[2])
+    wut_library_folder = Path(sys.argv[3])
+    # top_level_folder = Path("..") / "p0001-001_test-board"
+    # release_folder = Path("temp")
+    # wut_library_folder = Path("..") / "wut-libraries"
 
     x = KicadArtefactsGenerator(top_level_folder, release_folder, wut_library_folder)
     x.create_schematic_pdf()
