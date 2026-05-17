@@ -164,7 +164,9 @@ class KicadArtefactsGenerator:
         assert len(colour_folders) == 1
         colour_folder = colour_folders[0].parent / "colors"
         colour_folder.mkdir(parents=True, exist_ok=True)
-        shutil.copy2("export_colours.json", colour_folder / "user.json")
+        shutil.copy2(
+            Path(__file__).parent / "export_colours.json", colour_folder / "user.json"
+        )
 
     def discover_kicad_project(
         self,
