@@ -2,6 +2,7 @@ from dataclasses import dataclass
 import os
 from pathlib import Path
 import re
+import shutil
 import subprocess
 import sys
 from typing import Optional, Sequence, Tuple
@@ -157,6 +158,12 @@ class KicadArtefactsGenerator:
 
         add_wut_libs_to_kicad("sym-lib-table", "kicad_sym")
         add_wut_libs_to_kicad("fp-lib-table", "pretty")
+
+        # Copy non-standard colour settings over too
+        colour_folders = list(kicad_settings_folder.rglob("colors"))
+        assert len(colour_folders) == 1
+        colour_folder = colour_folders[0]
+        shutil.copy2("export_colours.json", colour_folder / "user.json")
 
     def discover_kicad_project(
         self,
@@ -422,16 +429,6 @@ class KicadArtefactsGenerator:
             ) as outFile:
                 outFile.write(content)
 
-    def main(self):
-        self.create_kicad_source()
-        self.create_schematic_pdf()
-        self.create_board_images()
-        self.create_kicad_source()
-        self.create_step_file()
-        self.create_ibom()
-
-        self.create_webpage()
-
 
 if __name__ == "__main__":
 
@@ -466,19 +463,3 @@ if __name__ == "__main__":
     x.create_step_file()
     x.create_ibom()
     x.create_webpage()
-
-    # try:
-    #     mouser_key = sys.argv[3]
-    # except IndexError:
-    #     mouser_key = None
-    # try:
-    #     farnell_key = sys.argv[4]
-    # except IndexError:
-    #     farnell_key = None
-
-    # main(
-    #     top_level_folder,
-    #     release_folder,
-    #     mouser_key,
-    #     farnell_key,
-    # )
