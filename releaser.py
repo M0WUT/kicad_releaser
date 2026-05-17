@@ -160,9 +160,10 @@ class KicadArtefactsGenerator:
         add_wut_libs_to_kicad("fp-lib-table", "pretty")
 
         # Copy non-standard colour settings over too
-        colour_folders = list(kicad_settings_folder.rglob("colors"))
+        colour_folders = list(kicad_settings_folder.rglob("sym-lib-table"))
         assert len(colour_folders) == 1
-        colour_folder = colour_folders[0]
+        colour_folder = colour_folders[0].parent / "colors"
+        colour_folder.mkdir(parents=True, exist_ok=True)
         shutil.copy2("export_colours.json", colour_folder / "user.json")
 
     def discover_kicad_project(
