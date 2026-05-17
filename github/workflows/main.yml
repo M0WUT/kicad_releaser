@@ -9,6 +9,19 @@ jobs:
       image: kicad/kicad:10.0-full
       options: --user root
     steps:
+      - name: Install Arial font
+        run: |
+          sed -i 's/Components: main/Components: main contrib non-free non-free-firmware/' /etc/apt/sources.list.d/debian.sources
+          apt-get update
+          apt-get install -y \
+            cabextract \
+            xfonts-utils \
+            fontconfig
+          echo "ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true" | debconf-set-selections
+          DEBIAN_FRONTEND=noninteractive apt-get install -y --reinstall \
+            ttf-mscorefonts-installer
+          fc-cache -f -v
+          
       - name: Everything
         run: |
           apt update
