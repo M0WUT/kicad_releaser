@@ -183,7 +183,7 @@ class ComponentAvailabilitySearcher:
 
             bom_report.write(sourcing_table + issues_found_str)
 
-    def run(
+    def generate_report(
         self,
         top_level_schematic: Path,
         dev_run: bool = False,
@@ -234,4 +234,4 @@ if __name__ == "__main__":
         api_keys[ComponentSupplierNames.FARNELL] = args.farnell_api_key
 
     x = ComponentAvailabilitySearcher(api_keys, output_folder)
-    x.run(top_level_schematic)
+    x.generate_report(top_level_schematic)

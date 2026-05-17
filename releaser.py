@@ -371,7 +371,7 @@ class KicadArtefactsGenerator:
         # Below is an expansion of kikit.boardpage with the broken command (which calls pcbdraw)
         # commented out as pcbdraw does not currently work and the output isn't used anyway
 
-        self._component_availability_searcher.generate_bom(
+        self._component_availability_searcher.generate_report(
             self.project_path.with_suffix(".kicad_sch")
         )
 
