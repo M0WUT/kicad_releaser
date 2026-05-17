@@ -146,7 +146,7 @@ class KicadArtefactsGenerator:
             contents = (
                 contents[:-1]
                 + [
-                    f'  (lib (name "{x}")(type "KiCad")(uri "${{WUT_LIBRARIES}}/{x}.{library_file_suffix}")(options "")(descr ""))\n'
+                    f'\t(lib (name "{x}")(type "KiCad")(uri "${{WUT_LIBRARIES}}/{x}.{library_file_suffix}")(options "")(descr ""))\n'
                     for x in wut_library_names
                 ]
                 + [")\n"]
