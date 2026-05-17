@@ -126,7 +126,7 @@ class KicadArtefactsGenerator:
 
     def add_wut_libraries(self):
         # Kicad needs to be told about the new WUT libraries
-        kicad_settings_folder = Path("/") / "home" / "kicad" / ".config" / "kicad"
+        kicad_settings_folder = Path.home() / ".config" / "kicad"
 
         def add_wut_libs_to_kicad(kicad_table_file_name: str, library_file_suffix: str):
             table_paths = list(kicad_settings_folder.rglob(kicad_table_file_name))
@@ -431,24 +431,25 @@ class KicadArtefactsGenerator:
 
 
 if __name__ == "__main__":
-
-    top_level_folder = Path(sys.argv[1])
-    release_folder = Path(sys.argv[2])
-    wut_library_folder = Path(sys.argv[3])
-    try:
-        mouser_api_key = sys.argv[4]
-    except IndexError:
+    debug = False
+    if debug:
+        top_level_folder = Path("..") / "p0001-001_test-board"
+        release_folder = Path("temp")
+        wut_library_folder = Path("..") / "wut-libraries"
         mouser_api_key = None
-
-    try:
-        farnell_api_key = sys.argv[5]
-    except IndexError:
         farnell_api_key = None
-
-    # @DEBUG
-    # top_level_folder = Path("..") / "p0001-001_test-board"
-    # release_folder = Path("temp")
-    # wut_library_folder = Path("..") / "wut-libraries"
+    else:
+        top_level_folder = Path(sys.argv[1])
+        release_folder = Path(sys.argv[2])
+        wut_library_folder = Path(sys.argv[3])
+        try:
+            mouser_api_key = sys.argv[4]
+        except IndexError:
+            mouser_api_key = None
+        try:
+            farnell_api_key = sys.argv[5]
+        except IndexError:
+            farnell_api_key = None
 
     x = KicadArtefactsGenerator(
         top_level_folder,
