@@ -22,7 +22,6 @@ jobs:
           git clone --depth 1 https://github.com/M0WUT/kicad_releaser.git kicad_releaser
           # git clone --depth 1 https://gitlab.com/kicad/libraries/kicad-packages3D.git /usr/share/kicad/3dmodels
           pip install --break-system-packages -r kicad_releaser/requirements.txt
-          pip install --break-system-packages git+https://github.com/yaqwsx/kikit
 
           mkdir build
           chmod 777 build

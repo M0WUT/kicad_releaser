@@ -2,5 +2,7 @@ build
 .vscode
 .venv
 *.png
-temp_schematic.pdf
+temp
 *.lck
+component_availability_dev.py
+__pycache__

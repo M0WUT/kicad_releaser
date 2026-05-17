@@ -1,9 +1,11 @@
-import json
-import logging
-from typing import Optional
+# Standard imports
 import re
-
 import requests
+
+# Third party imports
+
+# Local imports
+from supplier_api.supplier_api import SupplierAPI
 
 
 class FarnellBaseRequest:
@@ -12,7 +14,7 @@ class FarnellBaseRequest:
     def __init__(self, api_key: str):
         self.api_key = api_key
 
-    def get(self, options: dict[str:str]) -> requests.Response:
+    def get(self, options: dict[str, str]) -> requests.Response:
         url = self.BASE_URL
         for option, value in options.items():
             url += f"{option}={value}&"
@@ -21,20 +23,9 @@ class FarnellBaseRequest:
         return requests.get(url)
 
 
-class FarnellAPI:
-    def __init__(self, api_key: str, logger: Optional[logging.Logger] = None):
+class FarnellAPI(SupplierAPI):
 
-        self.api_key = api_key
-        if logger:
-            self.logger = logger
-        else:
-            self.logger = logging.getLogger(__name__)
-            self.logger.setLevel(logging.WARNING)
-            logger_handler = logging.StreamHandler()
-            logger_handler.setLevel(logging.WARNING)
-            self.logger.addHandler(logger_handler)
-
-    def check_for_stock(self, part_number: str) -> int:
+    def query_stock_quantity(self, part_number: str) -> int:
         try:
             self.logger.debug(f"Checking stock for {part_number}")
             part_number = re.sub("#", "%23", part_number)
@@ -70,15 +61,3 @@ class FarnellAPI:
             return 0  # Didn't find suitable stock
         except:
             raise Exception(part_number)
-
-
-if __name__ == "__main__":
-    logger = logging.getLogger("Mousearch Debug")
-    logger.setLevel(logging.DEBUG)
-    logger_handler = logging.StreamHandler()
-    logger_handler.setLevel(logging.DEBUG)
-    logger.addHandler(logger_handler)
-    with open("./farnell_key.txt", "r") as file:
-        api_key = file.readline()
-    x = FarnellAPI(api_key, logger)
-    print(x.check_for_stock("RK73H1ETTP1603"))
