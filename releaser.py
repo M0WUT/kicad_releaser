@@ -15,7 +15,7 @@ import pypdf
 
 from component_availability import ComponentAvailabilitySearcher, ComponentSupplierNames
 
-# from kikit.present import readTemplate
+from kikit.present import readTemplate
 
 
 @dataclass
@@ -370,17 +370,29 @@ class KicadArtefactsGenerator:
 
         # Below is an expansion of kikit.boardpage with the broken command (which calls pcbdraw)
         # commented out as pcbdraw does not currently work and the output isn't used anyway
+
+        self._component_availability_searcher.generate_bom(
+            self.project_path.with_suffix(".kicad_sch")
+        )
+
         template = readTemplate((Path(__file__).parent / "webpage_template").absolute())
         template.addDescriptionFile(
             str((self.project_path.parent / "README.md").absolute())
         )
         # template.setRepository(url)
         template.setName(self.project_path.stem)
+        comment = markdown2.markdown_path(
+            str((self.output_folder / f"availability_report.md").absolute()),
+            extras=["fenced-code-blocks", "tables"],
+        )
 
-        for name, comment, file in board_list:
-            template.addBoard(name, comment, file)
+        template.addBoard(
+            self.project_path.stem,
+            comment,
+            self.project_path.with_suffix(".kicad_pcb").absolute(),
+        )
 
-        template._copyResources(output_folder)
+        template._copyResources(self.output_folder)
         # self._renderBoards(outputDirectory)  # BROKEN LINE
 
         # Render page
@@ -395,7 +407,7 @@ class KicadArtefactsGenerator:
                     "gitRev": gitRev,
                     "gitRevShort": gitRev[:8] if gitRev else None,
                     "datetime": template.currentDateTime(),
-                    "name": repo_name,
+                    "name": "TEST",
                     "boards": template.boards,
                     "description": template.description,
                 }
@@ -406,84 +418,54 @@ class KicadArtefactsGenerator:
 
             # Write out file
             with open(
-                os.path.join(output_folder, "index.html"), "w", encoding="utf-8"
+                os.path.join(self.output_folder, "index.html"), "w", encoding="utf-8"
             ) as outFile:
                 outFile.write(content)
 
-    def main(
-        top_level_folder: Path,
-        release_folder: Path,
-        mouser_key: Optional[str] = None,
-        farnell_key: Optional[str] = None,
-    ):
-        FULL_RELEASE = True
-        print(
-            f"Releasing projects in {top_level_folder.absolute()} into {release_folder.absolute()}"
-        )
-        project_paths = discover_kicad_projects(top_level_folder)
-        if mouser_key and farnell_key:
-            bom_checker = Mousearch(mouser_key=mouser_key, farnell_key=farnell_key)
-        else:
-            bom_checker = None
+    def main(self):
+        self.create_kicad_source()
+        self.create_schematic_pdf()
+        self.create_board_images()
+        self.create_kicad_source()
+        self.create_step_file()
+        self.create_ibom()
 
-        boards = []
-        for x in project_paths:
-            # Do this first in case of accidential file creation in the repo
-            create_kicad_source(x, release_folder)
-
-            create_gerbers(x, release_folder)
-            if FULL_RELEASE:
-                create_schematic_pdf(x, release_folder)
-
-                create_board_images(x, release_folder, full_release=FULL_RELEASE)
-                create_step_file(x, release_folder)
-                create_ibom(x, release_folder)
-            if bom_checker:
-                bom_checker.run(
-                    x.with_suffix(".kicad_sch").absolute(),
-                    release_folder / f"{x.stem}-bom.md",
-                    mouser_basket=release_folder / f"{x.stem}-mouser-bom.csv",
-                    farnell_basket=release_folder / f"{x.stem}-farnell-bom.csv",
-                    full_release=FULL_RELEASE,
-                )
-                comment = markdown2.markdown_path(
-                    (release_folder / f"{x.stem}-bom.md").absolute(),
-                    extras=["fenced-code-blocks", "tables"],
-                )
-            else:
-                comment = ""
-            boards.append(
-                (
-                    x.stem,
-                    comment,
-                    x.with_suffix(".kicad_pcb").absolute(),
-                )
-            )
-
-        create_webpage(
-            top_level_folder=top_level_folder,
-            output_folder=release_folder,
-            board_list=boards,
-            resources=[],
-        )
+        self.create_webpage()
 
 
 if __name__ == "__main__":
 
-    # @DEBUG
     top_level_folder = Path(sys.argv[1])
     release_folder = Path(sys.argv[2])
     wut_library_folder = Path(sys.argv[3])
+    try:
+        mouser_api_key = sys.argv[4]
+    except IndexError:
+        mouser_api_key = None
+
+    try:
+        farnell_api_key = sys.argv[5]
+    except IndexError:
+        farnell_api_key = None
+
+    # @DEBUG
     # top_level_folder = Path("..") / "p0001-001_test-board"
     # release_folder = Path("temp")
     # wut_library_folder = Path("..") / "wut-libraries"
 
-    x = KicadArtefactsGenerator(top_level_folder, release_folder, wut_library_folder)
+    x = KicadArtefactsGenerator(
+        top_level_folder,
+        release_folder,
+        wut_library_folder,
+        mouser_api_key,
+        farnell_api_key,
+    )
     x.create_schematic_pdf()
     x.create_board_images()
     x.create_kicad_source()
-    # x.create_step_file()
-    # x.create_ibom()
+    x.create_step_file()
+    x.create_ibom()
+    x.create_webpage()
 
     # try:
     #     mouser_key = sys.argv[3]

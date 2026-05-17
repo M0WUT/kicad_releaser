@@ -12,7 +12,7 @@ jobs:
       - name: Everything
         run: |
           apt update
-          apt install -y python3-pip protobuf-compiler xvfb tree
+          apt install -y python3-pip protobuf-compiler xvfb
           HOME=/home/kicad/
           cd
 
@@ -26,16 +26,10 @@ jobs:
           mkdir build
           chmod 777 build
 
-          # kicad-cli version
-          # rm -r .config/kicad/8.99/*
-          # cp -r kicad_releaser/kicad_settings/* .config/kicad/8.99
-          # sed -i "s#PATH_TO_WUT_LIBRARIES#$(readlink -f wut-libraries)#" .config/kicad/8.99/kicad_common.json
-
           cd checkout
           Xvfb :1 &
           export DISPLAY=:1
-          python3 ../kicad_releaser/releaser.py . ../build ${{secrets.MOUSER_API_KEY}} ${{secrets.FARNELL_API_KEY}}
-          # tree ../build
+          python3 ../kicad_releaser/releaser.py . ../build ../wut-libraries ${{secrets.MOUSER_API_KEY}} ${{secrets.FARNELL_API_KEY}}
           
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
